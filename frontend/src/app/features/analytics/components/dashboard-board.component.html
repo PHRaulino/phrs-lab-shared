@@ -1,0 +1,130 @@
+<div
+  class="module-grid"
+  [class.layout-editing]="editing"
+  [style.min-height.px]="editing ? Math.max(300, rows * 72) : null"
+  (dragover)="dragover($event)"
+  (drop)="drop($event)"
+>
+  @for (module of section.modules; track module.id) {
+    @if (visual(module); as definition) {
+      <article
+        class="module-card"
+        [class.kpi-card]="definition.query.kind === 'kpi'"
+        [class.filter-affected]="highlightedIds?.includes(module.id)"
+        [class.filter-unaffected]="
+          highlightedIds && !highlightedIds.includes(module.id)
+        "
+        [style.grid-column]="
+          position(module).x + 1 + ' / span ' + position(module).w
+        "
+        [style.grid-row]="
+          position(module).y + 1 + ' / span ' + position(module).h
+        "
+        (contextmenu)="openMenu($event, module.id)"
+        [attr.aria-label]="module.configuration['title'] ?? definition.name"
+      >
+        <header>
+          <div
+            class="module-title"
+            [draggable]="editing"
+            (dragstart)="drag($event, module)"
+          >
+            @if (editing) {
+              <span class="drag-handle" title="Arraste para mover">⠿</span>
+            }
+            <h3>{{ module.configuration["title"] ?? definition.name }}</h3>
+          </div>
+          <div class="module-actions">
+            <button
+              class="more-button"
+              [attr.aria-label]="
+                'Ações do módulo ' +
+                (module.configuration['title'] ?? definition.name)
+              "
+              [attr.aria-expanded]="menu() === module.id"
+              (click)="openMenu($event, module.id)"
+            >
+              ···
+            </button>
+            @if (menu() === module.id) {
+              <div class="context-menu" role="menu">
+                @if (official) {
+                  <button role="menuitem" (click)="execute('copy', module)">
+                    Adicionar à minha dashboard
+                  </button>
+                }
+                @if (editing) {
+                  <button
+                    role="menuitem"
+                    (click)="execute('configure', module)"
+                  >
+                    Configurar título</button
+                  ><button role="menuitem" (click)="execute('left', module)">
+                    ← Mover à esquerda</button
+                  ><button role="menuitem" (click)="execute('right', module)">
+                    → Mover à direita</button
+                  ><button role="menuitem" (click)="execute('up', module)">
+                    ↑ Mover acima</button
+                  ><button role="menuitem" (click)="execute('down', module)">
+                    ↓ Mover abaixo</button
+                  ><button role="menuitem" (click)="execute('wider', module)">
+                    Aumentar largura</button
+                  ><button
+                    role="menuitem"
+                    (click)="execute('narrower', module)"
+                  >
+                    Diminuir largura</button
+                  ><button role="menuitem" (click)="execute('taller', module)">
+                    Aumentar altura</button
+                  ><button role="menuitem" (click)="execute('shorter', module)">
+                    Diminuir altura</button
+                  ><button
+                    role="menuitem"
+                    class="danger"
+                    (click)="execute('remove', module)"
+                  >
+                    Remover módulo
+                  </button>
+                }
+                @if (!editing && !official) {
+                  <span>Ative o modo de edição para alterar o módulo.</span>
+                }
+              </div>
+            }
+          </div>
+        </header>
+        <app-visual-host
+          [module]="module"
+          [visual]="definition"
+          [filters]="filters"
+          [values]="values"
+        />
+        @if (editing) {
+          <span class="size-label"
+            >{{ module.layout.w }} × {{ module.layout.h }}</span
+          ><button
+            class="resize-handle"
+            (pointerdown)="startResize($event, module)"
+            [attr.aria-label]="
+              'Redimensionar ' +
+              (module.configuration['title'] ?? definition.name)
+            "
+            title="Arraste para redimensionar. As mesmas opções estão no menu do módulo."
+          >
+            ⌟
+          </button>
+        }
+      </article>
+    }
+  }
+  @if (!section.modules.length) {
+    <div class="empty-section">
+      <span>▧</span><strong>Uma seção pronta para suas ideias.</strong>
+      <p>
+        Adicione visuais de uma dashboard oficial{{
+          editing ? " ou use o botão de adicionar módulo." : "."
+        }}
+      </p>
+    </div>
+  }
+</div>

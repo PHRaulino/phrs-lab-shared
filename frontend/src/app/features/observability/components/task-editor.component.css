@@ -1,0 +1,205 @@
+dialog {
+  width: min(740px, calc(100vw - 32px));
+  max-height: calc(100dvh - 48px);
+  padding: 0;
+  border: 1px solid #d9e1d1;
+  border-radius: 13px;
+  color: var(--ink);
+  background: #fff;
+  box-shadow: 0 24px 90px #14251c40;
+}
+dialog::backdrop {
+  background: #15271c80;
+  backdrop-filter: blur(3px);
+}
+form {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100dvh - 50px);
+}
+.editor-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 24px 28px 20px;
+  border-bottom: 1px solid var(--line);
+}
+h2 {
+  margin: 7px 0 9px;
+  font-size: 24px;
+  font-weight: 550;
+  letter-spacing: -0.7px;
+}
+.editor-task {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.editor-task span {
+  color: var(--muted);
+  font-weight: 400;
+}
+.editor-header .icon-button {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+.editor-body {
+  padding: 20px 28px 24px;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+.local-note {
+  font-size: 11px;
+  line-height: 1.8;
+  color: #756735;
+  background: #f7f3e5;
+  border: 1px solid #ebe3c9;
+  border-radius: 6px;
+  padding: 12px 14px;
+  margin: 0 0 18px;
+}
+.local-note strong {
+  display: block;
+}
+.file-context {
+  display: grid;
+  gap: 7px;
+}
+.file-context > span {
+  font-size: 10px;
+  color: var(--muted);
+}
+.file-context code {
+  font-size: 10px;
+  background: #f5f7f1;
+  padding: 10px;
+  border-radius: 5px;
+  overflow-wrap: anywhere;
+}
+.form-intro {
+  margin: 24px 0 18px;
+}
+.form-intro h3 {
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0 0 7px;
+}
+.form-intro p {
+  font-size: 11px;
+  color: var(--muted);
+  margin: 0;
+}
+.config-field {
+  margin-top: 17px;
+}
+.config-field label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.config-field label code {
+  font-size: 12px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.config-field label span {
+  font-size: 9px;
+  color: var(--muted);
+}
+.config-field input,
+.config-field select,
+.config-field textarea {
+  width: 100%;
+  font-size: 12px;
+  padding: 10px 12px;
+}
+.config-field textarea {
+  font-family: monospace;
+  line-height: 1.6;
+  resize: vertical;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  color: var(--ink);
+  min-height: 70px;
+}
+.config-field [aria-invalid="true"] {
+  border-color: #bf6151;
+  background: #fff9f6;
+}
+.field-error,
+.export-error {
+  font-size: 11px;
+  color: #aa4137;
+  line-height: 1.6;
+  margin: 7px 0 0;
+}
+.editor-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 18px 28px;
+  border-top: 1px solid var(--line);
+  background: #fafbf8;
+}
+.editor-footer > span {
+  font-size: 10px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.editor-footer > div {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.cancel-button {
+  padding: 10px 15px;
+  font-size: 12px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: white;
+  color: var(--ink);
+}
+.empty-config {
+  font-size: 12px;
+  color: var(--muted);
+}
+@media (max-width: 600px) {
+  .editor-header {
+    padding: 20px;
+  }
+  .editor-body {
+    padding: 18px 20px;
+  }
+  .editor-footer {
+    padding: 16px 20px;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .editor-footer > div {
+    justify-content: flex-end;
+  }
+  h2 {
+    font-size: 22px;
+  }
+}
+
+.yaml-preview {
+  display: block;
+  width: 100%;
+  padding: 16px;
+  border: 1px solid #d9e1d1;
+  background: #f7f9f4;
+  color: #284331;
+  border-radius: 7px;
+  font: 12px/1.7 monospace;
+  resize: vertical;
+  min-height: 240px;
+  white-space: pre;
+  tab-size: 2;
+  overflow: auto;
+}

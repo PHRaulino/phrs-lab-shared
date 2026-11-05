@@ -1,0 +1,127 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+.project-card {
+  padding: 23px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  min-width: 0;
+}
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 22px;
+  gap: 15px;
+}
+.project-symbol {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: #edf3e3;
+  font-size: 25px;
+  color: #829967;
+}
+.project-card a {
+  color: var(--ink);
+  text-decoration: none;
+}
+.project-card h2 {
+  font-size: 19px;
+  line-height: 1.5;
+  font-weight: 500;
+  letter-spacing: -0.4px;
+  margin: 0 0 12px;
+  overflow-wrap: anywhere;
+}
+.project-card > p {
+  font-size: 11px;
+  line-height: 1.9;
+  color: var(--muted);
+  margin: 0;
+  min-height: 60px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.progress-caption {
+  display: flex;
+  justify-content: space-between;
+  font-size: 9px;
+  color: #8a9979;
+  margin: 24px 0 10px;
+}
+.project-card footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 18px;
+  border-top: 1px solid var(--line);
+  padding-top: 14px;
+}
+.project-card footer small {
+  font-size: 8px;
+  color: var(--muted);
+}
+.status {
+  display: inline-block;
+  font-size: 9px;
+  padding: 5px 8px;
+  border-radius: 4px;
+  background: #f0f3ea;
+  color: #8a9878;
+  white-space: nowrap;
+}
+.status[data-status="active"],
+.status[data-status="development"] {
+  background: #eaf2ef;
+  color: #568679;
+}
+.status[data-status="completed"],
+.status[data-status="approved"] {
+  background: #edf5e4;
+  color: #65834b;
+}
+.status[data-status="paused"],
+.status[data-status="analysis"] {
+  background: #f7f0df;
+  color: #a18a48;
+}
+.status[data-status="archived"] {
+  background: #f0eef1;
+  color: #948995;
+}
+.progress {
+  height: 4px;
+  background: #eaf0df;
+  border-radius: 4px;
+}
+.progress > span {
+  display: block;
+  height: 100%;
+  background: #8ca76e;
+  border-radius: 4px;
+}
+.progress-number {
+  display: block;
+  font-size: 48px;
+  font-weight: 500;
+  letter-spacing: -2px;
+  margin: 18px 0 10px;
+}
+.progress-number small {
+  font-size: 20px;
+  letter-spacing: 0;
+  color: #8b9f72;
+}
+.danger {
+  color: #b36955;
+}
+.project-card {
+  height: 100%;
+}

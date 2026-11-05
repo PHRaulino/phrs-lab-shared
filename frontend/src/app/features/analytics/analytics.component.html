@@ -1,0 +1,597 @@
+<div class="analytics-topline">
+  <span>Workspace <span>/</span> Analytics</span
+  ><span class="local-mode">◉ Dados locais · independente do backend</span>
+</div>
+<div class="analytics-heading">
+  <div>
+    <p class="eyebrow">DADOS QUE CONTAM HISTÓRIAS</p>
+    <h1>Analytics<span>.</span></h1>
+    <p>Uma visão compartilhada. Um espaço para o seu olhar.</p>
+  </div>
+  <a class="backend-link" routerLink="/settings">{{ backend.label() }} ↗</a>
+</div>
+<div class="analytics-demo">
+  <strong>DEMONSTRAÇÃO LOCAL</strong> Datasets fictícios · Outubro de 2026.
+  Dashboards pessoais são salvas neste perfil de navegador.
+</div>
+<nav class="analytics-tabs" aria-label="Áreas de Analytics">
+  <button
+    [class.active]="view() === 'official'"
+    (click)="switchView('official')"
+  >
+    ▦ Dashboards oficiais</button
+  ><button
+    [class.active]="view() === 'personal'"
+    (click)="switchView('personal')"
+  >
+    ▣ Minhas dashboards <span>{{ store.personal().length }}</span>
+  </button>
+  @if (store.policy.internal) {
+    <button
+      [class.active]="view() === 'gallery'"
+      (click)="switchView('gallery')"
+    >
+      ◈ Galeria interna
+    </button>
+  }
+  <button
+    [class.active]="view() === 'settings'"
+    (click)="switchView('settings')"
+  >
+    ⚙ Configurações
+  </button>
+</nav>
+@if (store.error()) {
+  <div class="analytics-error" role="alert">
+    <span>{{ store.error() }}</span
+    ><button
+      class="text-button"
+      aria-label="Fechar erro"
+      (click)="store.error.set('')"
+    >
+      ×
+    </button>
+  </div>
+}
+@if (store.notice()) {
+  <div class="analytics-notice" role="status">
+    <span>{{ store.notice() }}</span
+    ><button
+      class="text-button"
+      aria-label="Fechar aviso"
+      (click)="store.notice.set('')"
+    >
+      ×
+    </button>
+  </div>
+}
+@if (store.loading()) {
+  <div class="analytics-empty" role="status">
+    <span>◌</span>
+    <h2>Preparando suas dashboards…</h2>
+    <p>Carregando definições e preferências locais.</p>
+  </div>
+} @else if (view() === "gallery") {
+  @if (store.policy.internal) {
+    <div class="section-intro">
+      <div>
+        <p class="eyebrow">CATÁLOGO DE COMPONENTES</p>
+        <h2>Visuais para novas perspectivas.</h2>
+        <p>Componentes desenvolvidos em código, prontos para reutilizar.</p>
+      </div>
+      <button class="primary-button" (click)="openMeta('official')">
+        + Compor dashboard oficial
+      </button>
+    </div>
+    <p class="policy-note">
+      Demonstração interna de desenvolvimento. Não há autenticação integrada;
+      esta política não é proteção de segurança. Em produção, o acesso permanece
+      restrito até receber autorização confiável.
+    </p>
+    <app-visual-gallery
+      (previewed)="preview.set($event)"
+      (added)="galleryAdd($event)"
+    />
+  }
+} @else if (view() === "settings") {
+  <div class="section-intro">
+    <div>
+      <p class="eyebrow">PREFERÊNCIAS DE ANALYTICS</p>
+      <h2>Seus dados, no lugar certo.</h2>
+    </div>
+  </div>
+  <div class="analytics-settings">
+    <section>
+      <h3>Persistência e identidade</h3>
+      <p>
+        Dashboards pessoais, layouts e filtros ficam no IndexedDB, na versão 1
+        do schema. O perfil local atual é <code>{{ store.policy.ownerId }}</code
+        >.
+      </p>
+      <p>
+        Não há autenticação nesta aplicação. A separação por identidade foi
+        isolada para integração futura; pessoas no mesmo perfil de navegador
+        podem acessar os mesmos dados locais.
+      </p>
+      <p>{{ store.saveState() || "Nenhuma alteração pendente." }}</p>
+    </section>
+    <section>
+      <h3>Importar uma definição JSON</h3>
+      <p>
+        Arquivos são validados por versão, metadados, visuais publicados, seções
+        e layout antes de serem usados.
+      </p>
+      @if (store.policy.internal) {
+        <label
+          >Importar como<select
+            [ngModel]="importMode()"
+            (ngModelChange)="importMode.set($event)"
+          >
+            <option value="personal">Dashboard pessoal</option>
+            <option value="official">Composição oficial local</option>
+          </select></label
+        >
+      }
+      <label class="file-label"
+        >Selecionar JSON<input
+          type="file"
+          accept=".json,application/json"
+          aria-label="Importar definição JSON"
+          (change)="importFile($event)"
+      /></label>
+    </section>
+    <section>
+      <h3>Fontes de dados</h3>
+      <p>
+        Os visuais usam adapters de dados e datasets JSON locais. Nenhuma
+        chamada ao backend é necessária para consultar estas dashboards.
+      </p>
+      <button class="secondary-button" (click)="clearCache()">
+        Limpar cache de datasets</button
+      ><a routerLink="/settings">Configurar backend ↗</a>
+    </section>
+    <section>
+      <h3>Distribuição oficial</h3>
+      <p>
+        Salvamentos locais não publicam dashboards para outros usuários. A
+        equipe interna compõe e exporta definições JSON para distribuição
+        estática versionada junto ao frontend.
+      </p>
+      <p>
+        A galeria e a composição oficial exigem uma política de autorização
+        confiável antes de serem habilitadas em produção.
+      </p>
+    </section>
+  </div>
+} @else {
+  <div class="dashboard-selector">
+    <label
+      >{{ view() === "official" ? "Dashboard oficial" : "Minha dashboard"
+      }}<select
+        aria-label="Selecionar dashboard"
+        [ngModel]="store.activeId()"
+        (ngModelChange)="store.select($event)"
+      >
+        @if (view() === "official") {
+          @for (dashboard of store.official(); track dashboard.id) {
+            <option [value]="dashboard.id">{{ dashboard.name }}</option>
+          }
+          @if (store.policy.internal) {
+            @for (dashboard of store.drafts(); track dashboard.id) {
+              <option [value]="dashboard.id">
+                {{ dashboard.name }} · Composição local
+              </option>
+            }
+          }
+        } @else {
+          @for (dashboard of store.personal(); track dashboard.id) {
+            <option [value]="dashboard.id">{{ dashboard.name }}</option>
+          }
+        }
+      </select></label
+    >
+    <div>
+      @if (view() === "personal") {
+        <button class="primary-button" (click)="openMeta('personal')">
+          + Nova dashboard pessoal
+        </button>
+      } @else if (store.policy.internal) {
+        <button class="secondary-button" (click)="openMeta('official')">
+          + Compor oficial
+        </button>
+      }
+    </div>
+  </div>
+  @if (store.selected(); as dashboard) {
+    <div class="dashboard-heading">
+      <div>
+        <span class="dashboard-badge">{{
+          dashboard.visibility === "personal"
+            ? "PESSOAL · PRIVADA NESTE PERFIL"
+            : dashboard.published
+              ? "OFICIAL · VERSÃO COMPARTILHADA"
+              : "OFICIAL · COMPOSIÇÃO LOCAL"
+        }}</span>
+        <h2>{{ dashboard.name }}</h2>
+        <p>{{ dashboard.description }}</p>
+        <div class="dashboard-tags">
+          @for (tag of dashboard.tags; track tag) {
+            <span>#{{ tag }}</span>
+          }
+        </div>
+      </div>
+      <div class="dashboard-actions">
+        @if (store.editable()) {
+          <button
+            class="secondary-button"
+            (click)="store.editing.set(!store.editing())"
+          >
+            {{
+              store.editing() ? "✓ Concluir edição" : "✎ Editar layout"
+            }}</button
+          ><button class="text-button" (click)="openMeta('rename')">
+            Renomear</button
+          ><button class="text-button" (click)="exportJson()">
+            Exportar JSON
+          </button>
+          @if (dashboard.visibility === "official") {
+            <button class="primary-button" (click)="exportJson(true)">
+              Preparar publicação
+            </button>
+          }
+        } @else {
+          <span class="read-only-note">◈ Composição em consulta</span>
+        }
+      </div>
+    </div>
+    @if (!dashboard.published && dashboard.visibility === "official") {
+      <p class="policy-note">
+        Esta composição está apenas neste navegador. Use “Preparar publicação”
+        para exportar a definição que será distribuída como arquivo estático
+        versionado.
+      </p>
+    }
+    @if (store.filters().length) {
+      <app-dashboard-filters
+        [filters]="store.filters()"
+        [values]="store.values()"
+        [moduleCount]="store.modules().length"
+        [highlighted]="store.highlightedFilter()"
+        (changed)="store.setFilter($event.id, $event.value)"
+        (cleared)="store.clearFilters()"
+        (focused)="store.highlightedFilter.set($event)"
+      />
+    }
+    @if (store.editing() && store.editable()) {
+      <div class="edit-toolbar">
+        <span
+          >⠿ Modo de edição · Arraste os títulos e redimensione pelos cantos. O
+          menu oferece alternativas por teclado.</span
+        >
+        <div>
+          <button class="secondary-button" (click)="addSection()">
+            + Seção</button
+          ><button class="secondary-button" (click)="picker.set(true)">
+            + Módulo</button
+          ><button class="text-button danger" (click)="askDeleteDashboard()">
+            Excluir dashboard
+          </button>
+        </div>
+      </div>
+    }
+    <div class="section-links" aria-label="Navegar pelas seções">
+      @for (section of sections(); track section.id) {
+        <a [routerLink]="[]" [fragment]="'section-' + section.id">{{
+          section.title
+        }}</a>
+      }
+    </div>
+    @for (section of sections(); track section.id) {
+      <section class="dashboard-section" [id]="'section-' + section.id">
+        <header class="section-header">
+          <div>
+            <button
+              class="collapse-section"
+              [attr.aria-expanded]="!isCollapsed(section.id)"
+              [attr.aria-label]="
+                (isCollapsed(section.id) ? 'Expandir ' : 'Recolher ') +
+                section.title
+              "
+              (click)="toggleSection(section.id)"
+            >
+              {{ isCollapsed(section.id) ? "›" : "⌄" }}
+            </button>
+            @if (store.editing() && store.editable()) {
+              <input
+                class="section-title-input"
+                [attr.aria-label]="'Nome da seção ' + section.title"
+                [value]="section.title"
+                (change)="
+                  store.renameSection(section.id, $any($event.target).value)
+                "
+                maxlength="120"
+              />
+            } @else {
+              <h3>{{ section.title }}</h3>
+            }
+            <span>{{ section.modules.length }} visuais</span>
+          </div>
+          @if (store.editing() && store.editable()) {
+            <div>
+              <button
+                class="text-button"
+                [attr.aria-label]="'Mover seção ' + section.title + ' acima'"
+                (click)="store.moveSection(section.id, -1)"
+              >
+                ↑</button
+              ><button
+                class="text-button"
+                [attr.aria-label]="'Mover seção ' + section.title + ' abaixo'"
+                (click)="store.moveSection(section.id, 1)"
+              >
+                ↓</button
+              ><button
+                class="text-button danger"
+                [attr.aria-label]="'Excluir seção ' + section.title"
+                (click)="askRemoveSection(section.id, section.title)"
+              >
+                ×
+              </button>
+            </div>
+          }
+        </header>
+        @if (!isCollapsed(section.id)) {
+          <app-dashboard-board
+            [section]="section"
+            [registry]="registry"
+            [editing]="store.editing() && store.editable()"
+            [official]="
+              dashboard.visibility === 'official' && dashboard.published
+            "
+            [filters]="store.filters()"
+            [values]="store.values()"
+            [highlightedIds]="selectedFilterIds()"
+            (action)="moduleAction(section.id, $event)"
+            (layoutChanged)="
+              store.layout(section.id, $event.id, $event.position)
+            "
+          />
+        }
+      </section>
+    }
+    @if (!dashboard.sections.length) {
+      <div class="analytics-empty">
+        <h2>Nenhuma seção por aqui.</h2>
+        <p>Ative o modo de edição para adicionar uma seção.</p>
+      </div>
+    }
+    <div class="analytics-footer">
+      <span>Dados demonstrativos locais · Schema v1</span
+      ><span role="status">{{
+        store.saveState() || "Dashboards oficiais distribuídas com a aplicação"
+      }}</span>
+    </div>
+  } @else {
+    <div class="analytics-empty">
+      <span>▧</span>
+      <h2>Seu próximo olhar começa aqui.</h2>
+      <p>
+        Crie uma dashboard pessoal e adicione visuais pelo menu dos cards
+        oficiais.
+      </p>
+      <button class="primary-button" (click)="openMeta('personal')">
+        Criar minha dashboard
+      </button>
+    </div>
+  }
+}
+@if (meta()) {
+  <app-analytics-modal
+    [title]="
+      meta() === 'rename'
+        ? 'Editar dashboard'
+        : meta() === 'official'
+          ? 'Nova composição oficial'
+          : 'Nova dashboard pessoal'
+    "
+    (dismissed)="meta.set(null)"
+    ><form class="analytics-form" (ngSubmit)="saveMeta()">
+      <label
+        >Nome<input
+          name="name"
+          [(ngModel)]="metaName"
+          required
+          maxlength="120" /></label
+      ><label
+        >Descrição<textarea
+          name="description"
+          [(ngModel)]="metaDescription"
+          rows="3"
+          maxlength="2000"
+        ></textarea></label
+      ><label
+        >Tags separadas por vírgula<input
+          name="tags"
+          [(ngModel)]="metaTags"
+          placeholder="operações, financeiro…"
+      /></label>
+      @if (modalError()) {
+        <p class="modal-error" role="alert">{{ modalError() }}</p>
+      }
+      <div class="form-actions">
+        <button class="secondary-button" type="button" (click)="meta.set(null)">
+          Cancelar</button
+        ><button
+          class="primary-button"
+          type="submit"
+          [disabled]="!metaName.trim()"
+        >
+          {{ meta() === "rename" ? "Salvar" : "Criar dashboard" }}
+        </button>
+      </div>
+    </form></app-analytics-modal
+  >
+}
+@if (sectionDialog()) {
+  <app-analytics-modal title="Nova seção" (dismissed)="sectionDialog.set(false)"
+    ><form class="analytics-form" (ngSubmit)="saveSection()">
+      <label
+        >Nome da seção<input
+          name="sectionName"
+          [(ngModel)]="sectionName"
+          maxlength="120"
+          required
+      /></label>
+      <div class="form-actions">
+        <button
+          type="submit"
+          class="primary-button"
+          [disabled]="!sectionName.trim()"
+        >
+          Criar seção
+        </button>
+      </div>
+    </form></app-analytics-modal
+  >
+}
+@if (destination(); as context) {
+  <app-analytics-modal
+    title="Adicionar visual à dashboard"
+    (dismissed)="destination.set(null)"
+    ><form class="analytics-form" (ngSubmit)="addToDestination()">
+      <p class="destination-visual">
+        {{ context.module.configuration["title"] ?? context.module.visualId }}
+      </p>
+      <label class="checkbox-label"
+        ><input type="checkbox" name="createNew" [(ngModel)]="createNew" />Criar
+        uma nova
+        {{
+          context.official ? "composição oficial" : "dashboard pessoal"
+        }}</label
+      >
+      @if (createNew) {
+        <label
+          >Nome da nova dashboard<input
+            name="newName"
+            [(ngModel)]="newName"
+            maxlength="120"
+            required
+        /></label>
+        <p class="form-note">O visual será adicionado à seção “Visão geral”.</p>
+      } @else {
+        <label
+          >Dashboard de destino<select
+            name="target"
+            [ngModel]="targetId"
+            (ngModelChange)="chooseTarget($event)"
+          >
+            @for (target of targets; track target.id) {
+              <option [value]="target.id">{{ target.name }}</option>
+            }
+          </select></label
+        ><label
+          >Seção de destino<select name="section" [(ngModel)]="targetSection">
+            @for (section of targetSections; track section.id) {
+              <option [value]="section.id">{{ section.title }}</option>
+            }
+          </select></label
+        >
+      }
+      @if (modalError()) {
+        <p class="modal-error" role="alert">{{ modalError() }}</p>
+      }
+      <div class="form-actions">
+        <button
+          type="button"
+          class="secondary-button"
+          (click)="destination.set(null)"
+        >
+          Cancelar</button
+        ><button class="primary-button" type="submit">Adicionar visual</button>
+      </div>
+    </form></app-analytics-modal
+  >
+}
+@if (picker()) {
+  <app-analytics-modal title="Adicionar módulo" (dismissed)="picker.set(false)"
+    ><p class="form-note">
+      Selecione um visual
+      {{
+        store.selected()?.visibility === "official"
+          ? "registrado"
+          : "já publicado nas dashboards oficiais"
+      }}.
+    </p>
+    <div class="visual-picker">
+      @for (
+        visual of store.selected()?.visibility === "official" &&
+        store.policy.internal
+          ? registry
+          : personalVisuals();
+        track visual.id
+      ) {
+        <button (click)="selectVisual(visual)">
+          <strong>{{ visual.name }}</strong
+          ><span>{{ visual.category }} · {{ visual.datasets.join(", ") }}</span>
+        </button>
+      }
+    </div></app-analytics-modal
+  >
+}
+@if (preview(); as visual) {
+  <app-analytics-modal [title]="visual.name" (dismissed)="preview.set(null)"
+    ><div class="gallery-preview">
+      <app-visual-host [module]="blueprint(visual)" [visual]="visual" />
+    </div>
+    <p class="form-note">
+      Dataset: {{ visual.datasets.join(", ") }} · Componente registrado v{{
+        visual.version
+      }}
+    </p></app-analytics-modal
+  >
+}
+@if (configure()) {
+  <app-analytics-modal
+    title="Configurar instância do visual"
+    (dismissed)="configure.set(null)"
+    ><form class="analytics-form" (ngSubmit)="saveModuleTitle()">
+      <label
+        >Título do módulo<input
+          name="moduleTitle"
+          [(ngModel)]="moduleTitle"
+          maxlength="120"
+          required
+      /></label>
+      <p class="form-note">
+        Esta configuração se aplica apenas a esta instância, sem alterar o
+        componente original.
+      </p>
+      <div class="form-actions">
+        <button
+          type="submit"
+          class="primary-button"
+          [disabled]="!moduleTitle.trim()"
+        >
+          Salvar configuração
+        </button>
+      </div>
+    </form></app-analytics-modal
+  >
+}
+@if (confirmation(); as dialog) {
+  <app-analytics-modal
+    [title]="dialog.title"
+    (dismissed)="confirmation.set(null)"
+    ><p class="confirm-message">{{ dialog.message }}</p>
+    <div class="form-actions">
+      <button class="secondary-button" (click)="confirmation.set(null)">
+        Cancelar</button
+      ><button
+        class="danger-button"
+        (click)="dialog.run(); confirmation.set(null)"
+      >
+        Excluir
+      </button>
+    </div></app-analytics-modal
+  >
+}

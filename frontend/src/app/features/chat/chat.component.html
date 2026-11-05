@@ -1,0 +1,291 @@
+<div class="chat-topline">
+  <span>Workspace <span>/</span> Chat IA</span
+  ><a routerLink="/projects/ai-settings">Configurações de IA ↗</a>
+</div>
+<div class="chat-shell">
+  <aside
+    class="conversations"
+    [class.expanded]="historyOpen()"
+    aria-label="Histórico de conversas"
+  >
+    <div class="history-heading">
+      <div>
+        <p class="eyebrow">SEU ESPAÇO</p>
+        <h2>Conversas</h2>
+      </div>
+      <button
+        class="icon-button mobile-close"
+        aria-label="Fechar histórico"
+        (click)="historyOpen.set(false)"
+      >
+        ×
+      </button>
+    </div>
+    <button
+      class="new-conversation"
+      (click)="newConversation()"
+      [disabled]="store.loading()"
+    >
+      <app-icon name="plus" />Nova conversa
+    </button>
+    <label class="search-label"
+      >Buscar conversa<input
+        type="search"
+        placeholder="Busque no histórico"
+        [ngModel]="query()"
+        (ngModelChange)="query.set($event)"
+    /></label>
+    <div class="conversation-list">
+      @for (conversation of conversations(); track conversation.id) {
+        <button
+          class="conversation"
+          [class.active]="store.record().activeId === conversation.id"
+          [attr.aria-current]="
+            store.record().activeId === conversation.id ? 'true' : null
+          "
+          (click)="choose(conversation.id)"
+        >
+          <app-icon name="chat" /><span
+            ><strong>{{ conversation.title }}</strong
+            ><small
+              >{{ conversation.updatedAt | date: "dd/MM HH:mm"
+              }}{{
+                conversation.mode === "demo" ? " · Demonstração" : ""
+              }}</small
+            ></span
+          >
+        </button>
+      } @empty {
+        <p class="history-empty">
+          {{
+            store.loading()
+              ? "Carregando conversas…"
+              : query()
+                ? "Nenhuma conversa encontrada."
+                : "Suas conversas aparecerão aqui."
+          }}
+        </p>
+      }
+    </div>
+    <div class="history-footer">
+      <span class="local-dot"></span
+      ><span>{{ store.saving() || "Histórico local neste navegador" }}</span>
+    </div>
+  </aside>
+  <section class="chat-main" aria-label="Chat com inteligência artificial">
+    <header class="chat-header">
+      <div class="chat-identity">
+        <button
+          class="icon-button history-toggle"
+          aria-label="Abrir histórico de conversas"
+          [attr.aria-expanded]="historyOpen()"
+          (click)="historyOpen.set(!historyOpen())"
+        >
+          <app-icon name="chat" /></button
+        ><span class="assistant-mark"><app-icon name="sparkles" /></span>
+        <div>
+          <h1>Chat IA</h1>
+          <p>
+            {{
+              mode() === "demo"
+                ? "Ambiente de demonstração"
+                : store.completion.model()
+            }}
+          </p>
+        </div>
+      </div>
+      <span class="connection" [class.ready]="canSend()"
+        ><span></span
+        >{{
+          mode() === "demo"
+            ? "Demonstração"
+            : canSend()
+              ? "Disponível"
+              : "Não configurado"
+        }}</span
+      >
+    </header>
+    @if (mode() === "demo") {
+      <div class="availability demo" role="status">
+        <p>
+          <strong>Demonstração.</strong> As respostas são simuladas para
+          experimentar a interface.
+        </p>
+        <button class="text-button" (click)="store.newConversation('provider')">
+          Usar provedor real
+        </button>
+      </div>
+    } @else if (!canSend()) {
+      <div class="availability" role="status">
+        <p>{{ store.completion.reason() }}</p>
+        @if (store.completion.demoAvailable) {
+          <button
+            class="text-button"
+            (click)="store.newConversation('demo')"
+            [disabled]="store.loading()"
+          >
+            Experimentar demonstração ↗
+          </button>
+        }
+      </div>
+    }
+    <div #thread class="thread" tabindex="0" aria-label="Mensagens da conversa">
+      @if (!store.active()?.messages?.length) {
+        <div class="welcome">
+          <span class="welcome-icon"><app-icon name="sparkles" /></span>
+          <p class="eyebrow">UMA CONVERSA, NOVAS POSSIBILIDADES</p>
+          <h2>Como posso ajudar<span>?</span></h2>
+          <p>
+            Explore ideias, esclareça dúvidas e organize informações em uma
+            conversa com IA.
+          </p>
+          <div class="suggestions">
+            @for (suggestion of suggestions; track suggestion) {
+              <button
+                (click)="suggest(suggestion)"
+                [disabled]="store.loading()"
+              >
+                {{ suggestion }}<span>↗</span>
+              </button>
+            }
+          </div>
+        </div>
+      }
+      <div
+        class="messages"
+        role="log"
+        aria-label="Histórico de mensagens"
+        aria-live="polite"
+        aria-relevant="additions"
+      >
+        @for (message of store.active()?.messages ?? []; track message.id) {
+          <article
+            class="message"
+            [class.user]="message.role === 'user'"
+            [attr.aria-label]="
+              message.role === 'user' ? 'Mensagem enviada' : 'Resposta da IA'
+            "
+          >
+            <div class="message-avatar">
+              @if (message.role === "assistant") {
+                <app-icon name="sparkles" />
+              } @else {
+                <span>Você</span>
+              }
+            </div>
+            <div class="message-body">
+              <div class="message-meta">
+                <strong>{{
+                  message.role === "user"
+                    ? "Você"
+                    : mode() === "demo"
+                      ? "Assistente · Demonstração"
+                      : "Assistente"
+                }}</strong
+                ><time>{{ message.createdAt | date: "HH:mm" }}</time>
+              </div>
+              <div class="message-content">{{ message.content }}</div>
+              <button
+                class="copy-button"
+                [attr.aria-label]="
+                  'Copiar ' +
+                  (message.role === 'user' ? 'mensagem' : 'resposta')
+                "
+                (click)="copy(message.id, message.content)"
+              >
+                <app-icon name="copy" />{{
+                  copied() === message.id ? "Copiado" : "Copiar"
+                }}
+              </button>
+            </div>
+          </article>
+        }
+        @if (store.sending()) {
+          <div class="responding" role="status">
+            <app-icon name="sparkles" /><span
+              >Preparando resposta<span class="dots">…</span></span
+            >
+          </div>
+        }
+      </div>
+    </div>
+    <div class="composer-area">
+      @if (store.error()) {
+        <div class="feedback" role="alert">{{ store.error() }}</div>
+      }
+      @if (copyError()) {
+        <div class="feedback" role="alert">{{ copyError() }}</div>
+      }
+      @if (store.pending() && !store.sending()) {
+        <div class="pending">
+          <span>Esta mensagem ainda não recebeu uma resposta.</span>
+          <div>
+            <button class="text-button" (click)="store.editPending()">
+              Editar mensagem</button
+            ><button
+              class="text-button"
+              [disabled]="!canSend()"
+              (click)="store.send(true)"
+            >
+              Tentar novamente
+            </button>
+          </div>
+        </div>
+      }
+      <form class="composer" (ngSubmit)="store.send()">
+        <label class="sr-only" for="chat-message">Sua mensagem</label
+        ><textarea
+          #composer
+          id="chat-message"
+          name="message"
+          rows="3"
+          maxlength="20000"
+          placeholder="Escreva sua mensagem…"
+          [ngModel]="store.draft()"
+          (ngModelChange)="store.setDraft($event)"
+          (keydown)="keydown($event)"
+          [disabled]="store.loading() || store.sending() || store.pending()"
+        ></textarea>
+        <div class="composer-bottom">
+          <span
+            >{{ store.draft().length }} / 20.000
+            <span class="keyboard-help"
+              >· Enter para enviar · Shift+Enter para nova linha</span
+            ></span
+          >
+          @if (store.sending()) {
+            <button
+              class="send-button"
+              type="button"
+              (click)="store.cancel()"
+              aria-label="Cancelar resposta"
+            >
+              <app-icon name="stop" />Cancelar
+            </button>
+          } @else {
+            <button
+              class="send-button"
+              type="submit"
+              [disabled]="
+                !canSend() ||
+                !store.draft().trim() ||
+                store.pending() ||
+                store.loading()
+              "
+              aria-label="Enviar mensagem"
+            >
+              <app-icon name="send" /><span>Enviar</span>
+            </button>
+          }
+        </div>
+      </form>
+      <p class="composer-note">
+        {{
+          mode() === "demo"
+            ? "Modo de demonstração · nenhuma resposta gerada por IA."
+            : "Respostas de IA podem conter erros. Confira as informações importantes."
+        }}
+      </p>
+    </div>
+  </section>
+</div>

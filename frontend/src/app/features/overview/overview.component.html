@@ -1,0 +1,102 @@
+<div class="breadcrumb">
+  Workspace <span>/</span> <strong>Visão geral</strong>
+</div>
+<div class="page-heading">
+  <div>
+    <p class="eyebrow">SEU PONTO DE PARTIDA</p>
+    <h1>Visão geral<span>.</span></h1>
+    <p class="subtitle">Tudo no lugar para dar vida às suas ideias.</p>
+  </div>
+  <span class="workspace-tag"
+    ><span class="status-dot"></span> Workspace ativo</span
+  >
+</div>
+<section class="welcome">
+  <div class="welcome-content">
+    <span class="welcome-label">BEM-VINDO AO PHRS LAB</span>
+    <h2>Grandes ideias.<br />Novos começos.</h2>
+    <p>
+      Seu espaço para explorar, conectar e construir.<br />O próximo passo é
+      seu.
+    </p>
+    <a class="light-button" routerLink="/workspace"
+      >Explorar workspace <app-icon name="arrow"
+    /></a>
+  </div>
+  <div class="hero-art" aria-hidden="true">
+    <div class="orbit orbit-one"></div>
+    <div class="orbit orbit-two"></div>
+    <div class="art-square square-back"></div>
+    <div class="art-square square-front"><app-icon name="layers" /></div>
+    <span class="art-dot dot-one"></span><span class="art-dot dot-two"></span
+    ><span class="art-plus">+</span>
+  </div>
+  <span class="hero-caption">UM ESPAÇO. INFINITAS POSSIBILIDADES.</span>
+</section>
+<div aria-live="polite" [attr.aria-busy]="loading()">
+  @if (loading()) {
+    <div class="feedback">Carregando seu workspace…</div>
+  } @else if (error()) {
+    <div class="feedback error">
+      <p>Não foi possível carregar os dados do workspace.</p>
+      <button class="primary-button" (click)="load()">Tentar novamente</button>
+    </div>
+  } @else {
+    @if (data(); as overview) {
+      <section class="stats" aria-label="Resumo do workspace">
+        @for (stat of overview.stats; track stat.label; let i = $index) {
+          <article class="stat-card">
+            <div class="stat-label">
+              {{ stat.label
+              }}<app-icon
+                [name]="i === 0 ? 'folder' : i === 1 ? 'layers' : 'code'"
+              />
+            </div>
+            <strong>{{ stat.value }}</strong>
+            <p>{{ stat.detail }}</p>
+          </article>
+        }
+      </section>
+      <div class="bottom-grid">
+        <section class="panel">
+          <div class="section-heading">
+            <h2>Primeiros passos</h2>
+            <span class="small-tag">COMECE AQUI</span>
+          </div>
+          <a class="workspace-link" routerLink="/workspace"
+            ><span class="tile-icon"><app-icon name="folder" /></span
+            ><span
+              ><strong>Conheça seu workspace</strong
+              ><small>Uma base simples. Muitas possibilidades.</small></span
+            ><app-icon name="arrow"
+          /></a>
+          <div class="ready-note">
+            <app-icon name="check" /><span
+              >Seu ambiente está pronto. Vamos construir?</span
+            >
+          </div>
+        </section>
+        <section class="panel activity">
+          <div class="section-heading">
+            <h2>Atividade recente</h2>
+            <span class="activity-count"
+              >{{ overview.activity.length }} eventos</span
+            >
+          </div>
+          <ol>
+            @for (item of overview.activity; track item.title) {
+              <li>
+                <span class="timeline-dot"></span>
+                <div>
+                  <strong>{{ item.title }}</strong>
+                  <p>{{ item.description }}</p>
+                  <time>{{ item.time }}</time>
+                </div>
+              </li>
+            }
+          </ol>
+        </section>
+      </div>
+    }
+  }
+</div>

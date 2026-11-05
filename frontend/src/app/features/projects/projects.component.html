@@ -1,0 +1,578 @@
+<div class="projects-topline">
+  <span>Workspace <span>/</span> IARA Analysis</span
+  ><a routerLink="/projects/ai-settings">✧ Configurações de IA ↗</a>
+</div>
+@if (store.error()) {
+  <div class="feedback error" role="alert">
+    {{ store.error()
+    }}<button class="text-button" (click)="store.error.set('')">Fechar</button>
+  </div>
+}
+@if (store.notice()) {
+  <div class="feedback success" role="status">
+    {{ store.notice()
+    }}<button class="text-button" (click)="store.notice.set('')">Fechar</button>
+  </div>
+}
+@if (store.loading()) {
+  <p role="status">Carregando IARA Analysis…</p>
+} @else {
+  <nav class="entity-tabs main-tabs" aria-label="Áreas do IARA Analysis">
+    <a
+      routerLink="/projects"
+      [queryParams]="{ area: 'knowledge' }"
+      [class.active]="!projectId() && !featureId() && area() === 'knowledge'"
+      >Knowledge <span>{{ store.record().materials.length }}</span></a
+    >
+    <a
+      routerLink="/projects"
+      [queryParams]="{ area: 'features' }"
+      [class.active]="!!featureId() || (!projectId() && area() === 'features')"
+      >Features <span>{{ store.record().features.length }}</span></a
+    >
+    <a
+      routerLink="/projects"
+      [queryParams]="{ area: 'projects' }"
+      [class.active]="
+        (!!projectId() && !featureId()) ||
+        (!projectId() && !featureId() && area() === 'projects')
+      "
+      >Projetos <span>{{ store.record().projects.length }}</span></a
+    >
+  </nav>
+  @if (!projectId() && !featureId()) {
+    <div class="page-heading">
+      <div>
+        <p class="eyebrow">IARA ANALYSIS · TRANSCRIÇÕES DE ATENDIMENTO</p>
+        <h1>
+          {{
+            area() === "knowledge"
+              ? "Sua base de conhecimento"
+              : area() === "features"
+                ? "Perguntas para avaliar conversas"
+                : "Projetos de análise de atendimento"
+          }}<span>.</span>
+        </h1>
+        <p>
+          {{
+            area() === "knowledge"
+              ? "Cadastre políticas, procedimentos e critérios de atendimento para apoiar as avaliações da IA."
+              : area() === "features"
+                ? "Cada feature é uma pergunta para a IA responder ao avaliar a transcrição de uma conversa de atendimento."
+                : "Agrupe perguntas de avaliação e referências. Informe a transcrição do atendimento para analisar a conversa."
+          }}
+        </p>
+      </div>
+      @if (area() !== "knowledge") {
+        <button
+          class="primary-button"
+          (click)="editor.set({ feature: area() === 'features', value: null })"
+        >
+          + {{ area() === "features" ? "Nova feature" : "Novo projeto" }}
+        </button>
+      }
+    </div>
+    <div class="local-banner">
+      <span
+        >Seus cadastros ficam salvos neste navegador. Features e knowledges têm
+        vida própria e podem ser reutilizados.</span
+      ><span>{{ store.saving() || "Workspace local" }}</span>
+    </div>
+    <div class="list-toolbar">
+      <label class="search"
+        >Buscar
+        {{
+          area() === "knowledge"
+            ? "knowledge"
+            : area() === "features"
+              ? "features"
+              : "projetos"
+        }}<input
+          type="search"
+          [ngModel]="query()"
+          (ngModelChange)="query.set($event)"
+          placeholder="Busque pelo nome ou título"
+      /></label>
+      <div class="backup-actions">
+        <button class="secondary" (click)="exportBackup()">
+          Exportar backup</button
+        ><label class="file-button"
+          >Importar backup<input
+            type="file"
+            accept=".json,application/json"
+            aria-label="Importar backup"
+            (change)="readBackup($event)"
+        /></label>
+      </div>
+    </div>
+    @switch (area()) {
+      @case ("knowledge") {
+        <app-project-materials projectId="" [materials]="allKnowledge()" />
+      }
+      @case ("features") {
+        <div class="feature-list">
+          @for (item of allFeatures(); track item.id) {
+            <article class="feature-row">
+              <a [routerLink]="['/projects/features', item.id]"
+                ><strong>{{ item.name }}</strong>
+                <p class="evaluation-question">
+                  {{
+                    item.question ||
+                      "Pergunta de avaliação ainda não configurada."
+                  }}
+                </p>
+                <p>
+                  {{
+                    item.description ||
+                      "Adicione uma descrição do que deve ser avaliado."
+                  }}
+                </p>
+                <small
+                  >{{ item.knowledgeIds?.length || 0 }} knowledges</small
+                ></a
+              ><span class="status" [attr.data-status]="item.status">{{
+                featureStatusLabel(item.status)
+              }}</span
+              ><button
+                class="text-button"
+                [attr.aria-label]="'Editar feature ' + item.name"
+                (click)="editor.set({ feature: true, value: item })"
+              >
+                Editar</button
+              ><button
+                class="text-button danger"
+                [attr.aria-label]="'Excluir feature ' + item.name"
+                (click)="removeFeature(item)"
+              >
+                Excluir
+              </button>
+            </article>
+          } @empty {
+            <div class="empty">
+              <span>✧</span>
+              <h2>Nenhuma feature por aqui.</h2>
+              <p>
+                Cadastre perguntas como: o atendente resolveu a solicitação do
+                cliente?
+              </p>
+            </div>
+          }
+        </div>
+      }
+      @case ("projects") {
+        <div class="project-grid">
+          @for (item of projects(); track item.id) {
+            <app-project-card
+              [project]="item"
+              [featureCount]="featureCount(item.id)"
+              [progress]="progress(item.id)"
+              (edited)="editor.set({ feature: false, value: item })"
+              (deleted)="removeProject(item)"
+            />
+          }
+        </div>
+        @if (!projects().length) {
+          <div class="empty">
+            <span>▱</span>
+            <h2>Nenhum projeto por aqui.</h2>
+            <p>
+              Crie um projeto para agrupar features e knowledges já cadastrados.
+            </p>
+          </div>
+        }
+      }
+    }
+  } @else {
+    @if (feature() || (!featureId() ? project() : undefined); as entity) {
+      <div class="breadcrumbs">
+        <a
+          routerLink="/projects"
+          [queryParams]="{ area: feature() ? 'features' : 'projects' }"
+          >← {{ feature() ? "Features" : "Projetos" }}</a
+        ><span>/</span><span>{{ entity.name }}</span>
+      </div>
+      <div class="page-heading">
+        <div>
+          <p class="eyebrow">{{ feature() ? "FEATURE" : "PROJETO" }}</p>
+          <h1 class="entity-title">{{ entity.name }}<span>.</span></h1>
+          <p>{{ entity.description || "Nenhuma descrição adicionada." }}</p>
+        </div>
+        <div class="heading-actions">
+          <button
+            class="secondary"
+            (click)="editor.set({ feature: !!feature(), value: entity })"
+          >
+            Editar {{ feature() ? "feature" : "projeto" }}
+          </button>
+          @if (!feature()) {
+            <button class="secondary" (click)="exportBackup(true)">
+              Exportar projeto
+            </button>
+          }
+        </div>
+      </div>
+      <nav class="entity-tabs" aria-label="Detalhes">
+        <a
+          [routerLink]="[]"
+          [queryParams]="{ tab: 'overview' }"
+          [class.active]="
+            tab() === 'overview' ||
+            tab() === 'features' ||
+            tab() === 'materials'
+          "
+          >Visão geral e vínculos</a
+        ><a
+          [routerLink]="[]"
+          [queryParams]="{ tab: 'analysis' }"
+          [class.active]="tab() === 'analysis'"
+          >Análise com IA</a
+        ><a
+          [routerLink]="[]"
+          [queryParams]="{ tab: 'history' }"
+          [class.active]="tab() === 'history'"
+          >Histórico <span>{{ history().length }}</span></a
+        >
+      </nav>
+      @if (tab() === "analysis") {
+        <app-project-analysis
+          [projectId]="projectId()"
+          [featureId]="featureId()"
+          [initialRunId]="initialRun()"
+        />
+      } @else if (tab() === "history") {
+        <div class="feature-list">
+          @for (run of history(); track run.id) {
+            <a
+              class="history-row"
+              [routerLink]="
+                run.featureId
+                  ? run.projectId
+                    ? ['/projects', run.projectId, 'features', run.featureId]
+                    : ['/projects/features', run.featureId]
+                  : ['/projects', run.projectId]
+              "
+              [queryParams]="{ tab: 'analysis', run: run.id }"
+              ><div>
+                <strong
+                  >{{ analysisType(run.type) }} · v{{ run.version }}</strong
+                ><small
+                  >{{ run.createdAt | date: "dd/MM/yyyy HH:mm" }} ·
+                  {{ run.context.materials.length }} knowledges</small
+                >
+              </div>
+              <span>↗</span></a
+            >
+          } @empty {
+            <p class="empty-inline">Nenhuma análise executada.</p>
+          }
+        </div>
+      } @else {
+        @if (feature(); as questionFeature) {
+          <article class="context-card">
+            <p class="eyebrow">PERGUNTA PARA A IA</p>
+            <h2>
+              {{
+                questionFeature.question ||
+                  "Configure a pergunta de avaliação desta feature."
+              }}
+            </h2>
+            <p class="helper">
+              A resposta deve considerar a transcrição do atendimento e os
+              knowledges selecionados como apoio.
+            </p>
+          </article>
+        }
+        @if (entity.objective || entity.context) {
+          <article class="context-card">
+            <p class="eyebrow">CONTEXTO</p>
+            @if (entity.objective) {
+              <h3>{{ feature() ? "Critério de avaliação" : "Objetivo" }}</h3>
+              <p class="long-text">{{ entity.objective }}</p>
+            }
+            @if (entity.context) {
+              <h3>
+                {{ feature() ? "Orientações para avaliar" : "Contexto geral" }}
+              </h3>
+              <p class="long-text">{{ entity.context }}</p>
+            }
+          </article>
+        }
+        @if (!feature()) {
+          <div class="section-heading">
+            <div>
+              <h2>
+                Features do projeto
+                <span class="status">{{ features().length }}</span>
+              </h2>
+              <p>
+                Selecione features do cadastro independente para compor esta
+                iniciativa.
+              </p>
+            </div>
+            <button class="secondary" (click)="openLinks('featureIds')">
+              Gerenciar features
+            </button>
+          </div>
+          <div class="feature-list">
+            @for (item of features(); track item.id) {
+              <article class="feature-row">
+                <a [routerLink]="['/projects/features', item.id]"
+                  ><strong>{{ item.name }}</strong>
+                  <p>{{ item.description }}</p>
+                  <small
+                    >{{ item.knowledgeIds?.length || 0 }} knowledges vinculados
+                    à feature</small
+                  ></a
+                ><span class="status">{{
+                  featureStatusLabel(item.status)
+                }}</span
+                ><button
+                  class="text-button"
+                  [attr.aria-label]="'Desvincular feature ' + item.name"
+                  (click)="unlink(item.id, 'featureIds')"
+                >
+                  Desvincular
+                </button>
+              </article>
+            } @empty {
+              <p class="empty-inline">
+                Nenhuma feature vinculada. Cadastre na aba Features e selecione
+                aqui.
+              </p>
+            }
+          </div>
+        }
+        <div class="section-heading">
+          <div>
+            <h2>
+              {{
+                feature()
+                  ? "Knowledge da feature"
+                  : "Knowledge direto do projeto"
+              }}
+              <span class="status">{{ directKnowledge().length }}</span>
+            </h2>
+            <p>
+              {{
+                feature()
+                  ? "Associe quantos knowledges precisar para dar contexto a esta feature."
+                  : "Referências próprias deste projeto, sem depender de uma feature."
+              }}
+            </p>
+          </div>
+          <button class="secondary" (click)="openLinks('knowledgeIds')">
+            Gerenciar knowledges
+          </button>
+        </div>
+        <div class="feature-list">
+          @for (item of directKnowledge(); track item.id) {
+            <article class="feature-row">
+              <div class="knowledge-summary">
+                <strong>{{ item.title }}</strong>
+                <p>
+                  {{ item.content.slice(0, 200)
+                  }}{{ item.content.length > 200 ? "…" : "" }}
+                </p>
+                <details>
+                  <summary>Ler conteúdo completo</summary>
+                  <p class="long-text">{{ item.content }}</p>
+                </details>
+              </div>
+              <button
+                class="text-button"
+                [attr.aria-label]="'Desvincular knowledge ' + item.title"
+                (click)="unlink(item.id, 'knowledgeIds')"
+              >
+                Desvincular
+              </button>
+            </article>
+          } @empty {
+            <p class="empty-inline">
+              Nenhum knowledge vinculado diretamente. Selecione itens da aba
+              Knowledge.
+            </p>
+          }
+        </div>
+        @if (!feature() && features().length) {
+          <div class="inherited-note">
+            <strong>Knowledge das features</strong>
+            <p>
+              Cada feature mantém seus próprios vínculos. Na análise do projeto,
+              você poderá selecionar também os knowledges das features
+              agrupadas.
+            </p>
+          </div>
+        }
+        <section class="requirements-section">
+          <div class="section-heading">
+            <div>
+              <h2>Requisitos registrados</h2>
+              <p>Decisões e requisitos preservados neste contexto.</p>
+            </div>
+            <button class="secondary" (click)="newRequirement()">
+              + Novo requisito
+            </button>
+          </div>
+          @for (req of scopedRequirements(); track req.id) {
+            <article class="requirement">
+              <div>
+                <span class="status" [attr.data-status]="req.status">{{
+                  req.status === "approved" ? "Aprovado" : "Rascunho"
+                }}</span>
+                <h3>{{ req.title }}</h3>
+                <p class="long-text">{{ req.description }}</p>
+              </div>
+              @if (req.status === "draft") {
+                <button
+                  class="text-button"
+                  (click)="store.approveRequirement(req.id)"
+                >
+                  Aprovar requisito
+                </button>
+              }
+            </article>
+          } @empty {
+            <p class="empty-inline">Nenhum requisito registrado.</p>
+          }
+        </section>
+      }
+    } @else {
+      <div class="empty">
+        <h2>Cadastro não encontrado.</h2>
+        <a routerLink="/projects">Voltar ao IARA Analysis</a>
+      </div>
+    }
+  }
+}
+<footer class="projects-footer">
+  <span>IARA Analysis · Avaliação de transcrições de atendimento.</span
+  ><span>{{ store.saving() || "Dados locais neste navegador" }}</span>
+</footer>
+@if (editor(); as item) {
+  <app-project-editor
+    [feature]="item.feature"
+    [value]="item.value"
+    (saved)="saveEntity($event)"
+    (dismissed)="editor.set(null)"
+  />
+}
+@if (linkDialog(); as field) {
+  <app-workspace-modal
+    [title]="
+      field === 'featureIds' ? 'Features do projeto' : 'Vincular knowledges'
+    "
+    (dismissed)="linkDialog.set(null)"
+    ><p class="helper">
+      Selecione os cadastros que deseja vincular. Desmarcar remove apenas o
+      vínculo, preservando o cadastro original.
+    </p>
+    <div class="dialog-form">
+      <label
+        >Buscar no cadastro<input
+          type="search"
+          [ngModel]="linkQuery()"
+          (ngModelChange)="linkQuery.set($event)"
+      /></label>
+    </div>
+    <div class="link-options">
+      @for (item of candidates(); track item.id) {
+        <label class="link-option"
+          ><input
+            type="checkbox"
+            [checked]="chosenLinks().has(item.id)"
+            (change)="toggleLink(item.id)"
+          /><span
+            ><strong>{{ item.name }}</strong
+            ><small>{{ item.description.slice(0, 130) }}</small></span
+          ></label
+        >
+      } @empty {
+        <p class="empty-inline">
+          Nenhum cadastro encontrado. Crie os itens na aba
+          {{ field === "featureIds" ? "Features" : "Knowledge" }}.
+        </p>
+      }
+    </div>
+    <div class="dialog-actions">
+      <button class="secondary" (click)="linkDialog.set(null)">Cancelar</button
+      ><button class="primary-button" (click)="saveLinks()">
+        Salvar vínculos ({{ chosenLinks().size }})
+      </button>
+    </div></app-workspace-modal
+  >
+}
+@if (requirementForm()) {
+  <app-workspace-modal
+    title="Novo requisito"
+    (dismissed)="requirementForm.set(false)"
+    ><form class="dialog-form" (ngSubmit)="saveRequirement()">
+      <label
+        >Título<input
+          name="title"
+          [(ngModel)]="requirementTitle"
+          required
+          maxlength="160" /></label
+      ><label
+        >Descrição<textarea
+          name="description"
+          [(ngModel)]="requirementDescription"
+          rows="7"
+          maxlength="200000"
+        ></textarea>
+      </label>
+      @if (requirementError()) {
+        <p role="alert" class="form-error">{{ requirementError() }}</p>
+      }
+      <div class="dialog-actions">
+        <button
+          type="button"
+          class="secondary"
+          (click)="requirementForm.set(false)"
+        >
+          Cancelar</button
+        ><button class="primary-button" [disabled]="!requirementTitle.trim()">
+          Salvar requisito
+        </button>
+      </div>
+    </form></app-workspace-modal
+  >
+}
+@if (restoreDialog()) {
+  <app-workspace-modal
+    title="Importar backup"
+    (dismissed)="restoreDialog.set(false)"
+    ><p class="helper">
+      Por padrão, os cadastros são adicionados sem alterar os existentes.
+      Backups anteriores são migrados automaticamente.
+    </p>
+    <label class="replace-checkbox"
+      ><input type="checkbox" [(ngModel)]="replaceBackup" />Substituir todos os
+      dados locais pelo backup</label
+    >
+    @if (importError()) {
+      <p class="form-error" role="alert">{{ importError() }}</p>
+    }
+    <div class="dialog-actions">
+      <button class="secondary" (click)="restoreDialog.set(false)">
+        Cancelar</button
+      ><button class="primary-button" (click)="importBackup()">
+        Importar backup
+      </button>
+    </div></app-workspace-modal
+  >
+}
+@if (confirmation(); as item) {
+  <app-workspace-modal [title]="item.title" (dismissed)="confirmation.set(null)"
+    ><p class="confirm-message">{{ item.message }}</p>
+    <div class="dialog-actions">
+      <button class="secondary" (click)="confirmation.set(null)">
+        Cancelar</button
+      ><button
+        class="danger-button"
+        (click)="item.run(); confirmation.set(null)"
+      >
+        Confirmar
+      </button>
+    </div></app-workspace-modal
+  >
+}

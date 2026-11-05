@@ -1,0 +1,740 @@
+{
+  "tables": {
+    "executions": [
+      {
+        "execution_id": "exec-1-0",
+        "execution_date": "2026-10-01",
+        "business_unit": "Comercial",
+        "unit_id": "commerce",
+        "status": "completed",
+        "layer": "SOT",
+        "duration_minutes": 10,
+        "rows_processed": 13780
+      },
+      {
+        "execution_id": "exec-1-1",
+        "execution_date": "2026-10-01",
+        "business_unit": "Financeiro",
+        "unit_id": "finance",
+        "status": "error",
+        "layer": "SPEC",
+        "duration_minutes": 17,
+        "rows_processed": 17280
+      },
+      {
+        "execution_id": "exec-1-2",
+        "execution_date": "2026-10-01",
+        "business_unit": "Operações",
+        "unit_id": "operations",
+        "status": "running",
+        "layer": "SOR",
+        "duration_minutes": 24,
+        "rows_processed": 20780
+      },
+      {
+        "execution_id": "exec-2-0",
+        "execution_date": "2026-10-02",
+        "business_unit": "Comercial",
+        "unit_id": "commerce",
+        "status": "error",
+        "layer": "SPEC",
+        "duration_minutes": 13,
+        "rows_processed": 15560
+      },
+      {
+        "execution_id": "exec-2-1",
+        "execution_date": "2026-10-02",
+        "business_unit": "Financeiro",
+        "unit_id": "finance",
+        "status": "running",
+        "layer": "SOR",
+        "duration_minutes": 20,
+        "rows_processed": 19060
+      },
+      {
+        "execution_id": "exec-2-2",
+        "execution_date": "2026-10-02",
+        "business_unit": "Operações",
+        "unit_id": "operations",
+        "status": "completed",
+        "layer": "SOT",
+        "duration_minutes": 27,
+        "rows_processed": 22560
+      },
+      {
+        "execution_id": "exec-3-0",
+        "execution_date": "2026-10-03",
+        "business_unit": "Comercial",
+        "unit_id": "commerce",
+        "status": "running",
+        "layer": "SOR",
+        "duration_minutes": 16,
+        "rows_processed": 17340
+      },
+      {
+        "execution_id": "exec-3-1",
+        "execution_date": "2026-10-03",
+        "business_unit": "Financeiro",
+        "unit_id": "finance",
+        "status": "completed",
+        "layer": "SOT",
+        "duration_minutes": 23,
+        "rows_processed": 20840
+      },
+      {
+        "execution_id": "exec-3-2",
+        "execution_date": "2026-10-03",
+        "business_unit": "Operações",
+        "unit_id": "operations",
+        "status": "waiting",
+        "layer": "SPEC",
+        "duration_minutes": 30,
+        "rows_processed": 24340
+      },
+      {
+        "execution_id": "exec-4-0",
+        "execution_date": "2026-10-04",
+        "business_unit": "Comercial",
+        "unit_id": "commerce",
+        "status": "completed",
+        "layer": "SOT",
+        "duration_minutes": 19,
+        "rows_processed": 19120
+      },
+      {
+        "execution_id": "exec-4-1",
+        "execution_date": "2026-10-04",
+        "business_unit": "Financeiro",
+        "unit_id": "finance",
+        "status": "waiting",
+        "layer": "SPEC",
+        "duration_minutes": 26,
+        "rows_processed": 22620
+      },
+      {
+        "execution_id": "exec-4-2",
+        "execution_date": "2026-10-04",
+        "business_unit": "Operações",
+        "unit_id": "operations",
+        "status": "completed",
+        "layer": "SOR",
+        "duration_minutes": 33,
+        "rows_processed": 26120
+      },
+      {
+        "execution_id": "exec-5-0",
+        "execution_date": "2026-10-05",
+        "business_unit": "Comercial",
+        "unit_id": "commerce",
+        "status": "waiting",
+        "layer": "SPEC",
+        "duration_minutes": 22,
+        "rows_processed": 20900
+      },
+      {
+        "execution_id": "exec-5-1",
+        "execution_date": "2026-10-05",
+        "business_unit": "Financeiro",
+        "unit_id": "finance",
+        "status": "completed",
+        "layer": "SOR",
+        "duration_minutes": 29,
+        "rows_processed": 24400
+      },
+      {
+        "execution_id": "exec-5-2",
+        "execution_date": "2026-10-05",
+        "business_unit": "Operações",
+        "unit_id": "operations",
+        "status": "completed",
+        "layer": "SOT",
+        "duration_minutes": 36,
+        "rows_processed": 27900
+      },
+      {
+        "execution_id": "exec-6-0",
+        "execution_date": "2026-10-06",
+        "business_unit": "Comercial",
+        "unit_id": "commerce",
+        "status": "completed",
+        "layer": "SOR",
+        "duration_minutes": 25,
+        "rows_processed": 22680
+      },
+      {
+        "execution_id": "exec-6-1",
+        "execution_date": "2026-10-06",
+        "business_unit": "Financeiro",
+        "unit_id": "finance",
+        "status": "completed",
+        "layer": "SOT",
+        "duration_minutes": 32,
+        "rows_processed": 26180
+      },
+      {
+        "execution_id": "exec-6-2",
+        "execution_date": "2026-10-06",
+        "business_unit": "Operações",
+        "unit_id": "operations",
+        "status": "error",
+        "layer": "SPEC",
+        "duration_minutes": 39,
+        "rows_processed": 29680
+      },
+      {
+        "execution_id": "exec-7-0",
+        "execution_date": "2026-10-07",
+        "business_unit": "Comercial",
+        "unit_id": "commerce",
+        "status": "completed",
+        "layer": "SOT",
+        "duration_minutes": 28,
+        "rows_processed": 24460
+      },
+      {
+        "execution_id": "exec-7-1",
+        "execution_date": "2026-10-07",
+        "business_unit": "Financeiro",
+        "unit_id": "finance",
+        "status": "error",
+        "layer": "SPEC",
+        "duration_minutes": 35,
+        "rows_processed": 27960
+      },
+      {
+        "execution_id": "exec-7-2",
+        "execution_date": "2026-10-07",
+        "business_unit": "Operações",
+        "unit_id": "operations",
+        "status": "running",
+        "layer": "SOR",
+        "duration_minutes": 42,
+        "rows_processed": 31460
+      },
+      {
+        "execution_id": "exec-8-0",
+        "execution_date": "2026-10-08",
+        "business_unit": "Comercial",
+        "unit_id": "commerce",
+        "status": "error",
+        "layer": "SPEC",
+        "duration_minutes": 31,
+        "rows_processed": 26240
+      },
+      {
+        "execution_id": "exec-8-1",
+        "execution_date": "2026-10-08",
+        "business_unit": "Financeiro",
+        "unit_id": "finance",
+        "status": "running",
+        "layer": "SOR",
+        "duration_minutes": 38,
+        "rows_processed": 29740
+      },
+      {
+        "execution_id": "exec-8-2",
+        "execution_date": "2026-10-08",
+        "business_unit": "Operações",
+        "unit_id": "operations",
+        "status": "completed",
+        "layer": "SOT",
+        "duration_minutes": 45,
+        "rows_processed": 33240
+      },
+      {
+        "execution_id": "exec-9-0",
+        "execution_date": "2026-10-09",
+        "business_unit": "Comercial",
+        "unit_id": "commerce",
+        "status": "running",
+        "layer": "SOR",
+        "duration_minutes": 34,
+        "rows_processed": 28020
+      },
+      {
+        "execution_id": "exec-9-1",
+        "execution_date": "2026-10-09",
+        "business_unit": "Financeiro",
+        "unit_id": "finance",
+        "status": "completed",
+        "layer": "SOT",
+        "duration_minutes": 41,
+        "rows_processed": 31520
+      },
+      {
+        "execution_id": "exec-9-2",
+        "execution_date": "2026-10-09",
+        "business_unit": "Operações",
+        "unit_id": "operations",
+        "status": "waiting",
+        "layer": "SPEC",
+        "duration_minutes": 48,
+        "rows_processed": 35020
+      },
+      {
+        "execution_id": "exec-10-0",
+        "execution_date": "2026-10-10",
+        "business_unit": "Comercial",
+        "unit_id": "commerce",
+        "status": "completed",
+        "layer": "SOT",
+        "duration_minutes": 37,
+        "rows_processed": 29800
+      },
+      {
+        "execution_id": "exec-10-1",
+        "execution_date": "2026-10-10",
+        "business_unit": "Financeiro",
+        "unit_id": "finance",
+        "status": "waiting",
+        "layer": "SPEC",
+        "duration_minutes": 44,
+        "rows_processed": 33300
+      },
+      {
+        "execution_id": "exec-10-2",
+        "execution_date": "2026-10-10",
+        "business_unit": "Operações",
+        "unit_id": "operations",
+        "status": "completed",
+        "layer": "SOR",
+        "duration_minutes": 51,
+        "rows_processed": 36800
+      },
+      {
+        "execution_id": "exec-11-0",
+        "execution_date": "2026-10-11",
+        "business_unit": "Comercial",
+        "unit_id": "commerce",
+        "status": "waiting",
+        "layer": "SPEC",
+        "duration_minutes": 40,
+        "rows_processed": 31580
+      },
+      {
+        "execution_id": "exec-11-1",
+        "execution_date": "2026-10-11",
+        "business_unit": "Financeiro",
+        "unit_id": "finance",
+        "status": "completed",
+        "layer": "SOR",
+        "duration_minutes": 47,
+        "rows_processed": 35080
+      },
+      {
+        "execution_id": "exec-11-2",
+        "execution_date": "2026-10-11",
+        "business_unit": "Operações",
+        "unit_id": "operations",
+        "status": "completed",
+        "layer": "SOT",
+        "duration_minutes": 54,
+        "rows_processed": 38580
+      },
+      {
+        "execution_id": "exec-12-0",
+        "execution_date": "2026-10-12",
+        "business_unit": "Comercial",
+        "unit_id": "commerce",
+        "status": "completed",
+        "layer": "SOR",
+        "duration_minutes": 43,
+        "rows_processed": 33360
+      },
+      {
+        "execution_id": "exec-12-1",
+        "execution_date": "2026-10-12",
+        "business_unit": "Financeiro",
+        "unit_id": "finance",
+        "status": "completed",
+        "layer": "SOT",
+        "duration_minutes": 50,
+        "rows_processed": 36860
+      },
+      {
+        "execution_id": "exec-12-2",
+        "execution_date": "2026-10-12",
+        "business_unit": "Operações",
+        "unit_id": "operations",
+        "status": "error",
+        "layer": "SPEC",
+        "duration_minutes": 57,
+        "rows_processed": 40360
+      },
+      {
+        "execution_id": "exec-13-0",
+        "execution_date": "2026-10-13",
+        "business_unit": "Comercial",
+        "unit_id": "commerce",
+        "status": "completed",
+        "layer": "SOT",
+        "duration_minutes": 46,
+        "rows_processed": 35140
+      },
+      {
+        "execution_id": "exec-13-1",
+        "execution_date": "2026-10-13",
+        "business_unit": "Financeiro",
+        "unit_id": "finance",
+        "status": "error",
+        "layer": "SPEC",
+        "duration_minutes": 53,
+        "rows_processed": 38640
+      },
+      {
+        "execution_id": "exec-13-2",
+        "execution_date": "2026-10-13",
+        "business_unit": "Operações",
+        "unit_id": "operations",
+        "status": "running",
+        "layer": "SOR",
+        "duration_minutes": 60,
+        "rows_processed": 42140
+      },
+      {
+        "execution_id": "exec-14-0",
+        "execution_date": "2026-10-14",
+        "business_unit": "Comercial",
+        "unit_id": "commerce",
+        "status": "error",
+        "layer": "SPEC",
+        "duration_minutes": 49,
+        "rows_processed": 36920
+      },
+      {
+        "execution_id": "exec-14-1",
+        "execution_date": "2026-10-14",
+        "business_unit": "Financeiro",
+        "unit_id": "finance",
+        "status": "running",
+        "layer": "SOR",
+        "duration_minutes": 56,
+        "rows_processed": 40420
+      },
+      {
+        "execution_id": "exec-14-2",
+        "execution_date": "2026-10-14",
+        "business_unit": "Operações",
+        "unit_id": "operations",
+        "status": "completed",
+        "layer": "SOT",
+        "duration_minutes": 8,
+        "rows_processed": 43920
+      },
+      {
+        "execution_id": "exec-15-0",
+        "execution_date": "2026-10-15",
+        "business_unit": "Comercial",
+        "unit_id": "commerce",
+        "status": "running",
+        "layer": "SOR",
+        "duration_minutes": 52,
+        "rows_processed": 38700
+      },
+      {
+        "execution_id": "exec-15-1",
+        "execution_date": "2026-10-15",
+        "business_unit": "Financeiro",
+        "unit_id": "finance",
+        "status": "completed",
+        "layer": "SOT",
+        "duration_minutes": 59,
+        "rows_processed": 42200
+      },
+      {
+        "execution_id": "exec-15-2",
+        "execution_date": "2026-10-15",
+        "business_unit": "Operações",
+        "unit_id": "operations",
+        "status": "waiting",
+        "layer": "SPEC",
+        "duration_minutes": 11,
+        "rows_processed": 45700
+      },
+      {
+        "execution_id": "exec-16-0",
+        "execution_date": "2026-10-16",
+        "business_unit": "Comercial",
+        "unit_id": "commerce",
+        "status": "completed",
+        "layer": "SOT",
+        "duration_minutes": 55,
+        "rows_processed": 40480
+      },
+      {
+        "execution_id": "exec-16-1",
+        "execution_date": "2026-10-16",
+        "business_unit": "Financeiro",
+        "unit_id": "finance",
+        "status": "waiting",
+        "layer": "SPEC",
+        "duration_minutes": 7,
+        "rows_processed": 43980
+      },
+      {
+        "execution_id": "exec-16-2",
+        "execution_date": "2026-10-16",
+        "business_unit": "Operações",
+        "unit_id": "operations",
+        "status": "completed",
+        "layer": "SOR",
+        "duration_minutes": 14,
+        "rows_processed": 47480
+      },
+      {
+        "execution_id": "exec-17-0",
+        "execution_date": "2026-10-17",
+        "business_unit": "Comercial",
+        "unit_id": "commerce",
+        "status": "waiting",
+        "layer": "SPEC",
+        "duration_minutes": 58,
+        "rows_processed": 42260
+      },
+      {
+        "execution_id": "exec-17-1",
+        "execution_date": "2026-10-17",
+        "business_unit": "Financeiro",
+        "unit_id": "finance",
+        "status": "completed",
+        "layer": "SOR",
+        "duration_minutes": 10,
+        "rows_processed": 45760
+      },
+      {
+        "execution_id": "exec-17-2",
+        "execution_date": "2026-10-17",
+        "business_unit": "Operações",
+        "unit_id": "operations",
+        "status": "completed",
+        "layer": "SOT",
+        "duration_minutes": 17,
+        "rows_processed": 49260
+      },
+      {
+        "execution_id": "exec-18-0",
+        "execution_date": "2026-10-18",
+        "business_unit": "Comercial",
+        "unit_id": "commerce",
+        "status": "completed",
+        "layer": "SOR",
+        "duration_minutes": 61,
+        "rows_processed": 44040
+      },
+      {
+        "execution_id": "exec-18-1",
+        "execution_date": "2026-10-18",
+        "business_unit": "Financeiro",
+        "unit_id": "finance",
+        "status": "completed",
+        "layer": "SOT",
+        "duration_minutes": 13,
+        "rows_processed": 47540
+      },
+      {
+        "execution_id": "exec-18-2",
+        "execution_date": "2026-10-18",
+        "business_unit": "Operações",
+        "unit_id": "operations",
+        "status": "error",
+        "layer": "SPEC",
+        "duration_minutes": 20,
+        "rows_processed": 51040
+      },
+      {
+        "execution_id": "exec-19-0",
+        "execution_date": "2026-10-19",
+        "business_unit": "Comercial",
+        "unit_id": "commerce",
+        "status": "completed",
+        "layer": "SOT",
+        "duration_minutes": 9,
+        "rows_processed": 45820
+      },
+      {
+        "execution_id": "exec-19-1",
+        "execution_date": "2026-10-19",
+        "business_unit": "Financeiro",
+        "unit_id": "finance",
+        "status": "error",
+        "layer": "SPEC",
+        "duration_minutes": 16,
+        "rows_processed": 49320
+      },
+      {
+        "execution_id": "exec-19-2",
+        "execution_date": "2026-10-19",
+        "business_unit": "Operações",
+        "unit_id": "operations",
+        "status": "running",
+        "layer": "SOR",
+        "duration_minutes": 23,
+        "rows_processed": 52820
+      },
+      {
+        "execution_id": "exec-20-0",
+        "execution_date": "2026-10-20",
+        "business_unit": "Comercial",
+        "unit_id": "commerce",
+        "status": "error",
+        "layer": "SPEC",
+        "duration_minutes": 12,
+        "rows_processed": 47600
+      },
+      {
+        "execution_id": "exec-20-1",
+        "execution_date": "2026-10-20",
+        "business_unit": "Financeiro",
+        "unit_id": "finance",
+        "status": "running",
+        "layer": "SOR",
+        "duration_minutes": 19,
+        "rows_processed": 51100
+      },
+      {
+        "execution_id": "exec-20-2",
+        "execution_date": "2026-10-20",
+        "business_unit": "Operações",
+        "unit_id": "operations",
+        "status": "completed",
+        "layer": "SOT",
+        "duration_minutes": 26,
+        "rows_processed": 54600
+      },
+      {
+        "execution_id": "exec-21-0",
+        "execution_date": "2026-10-21",
+        "business_unit": "Comercial",
+        "unit_id": "commerce",
+        "status": "running",
+        "layer": "SOR",
+        "duration_minutes": 15,
+        "rows_processed": 49380
+      },
+      {
+        "execution_id": "exec-21-1",
+        "execution_date": "2026-10-21",
+        "business_unit": "Financeiro",
+        "unit_id": "finance",
+        "status": "completed",
+        "layer": "SOT",
+        "duration_minutes": 22,
+        "rows_processed": 52880
+      },
+      {
+        "execution_id": "exec-21-2",
+        "execution_date": "2026-10-21",
+        "business_unit": "Operações",
+        "unit_id": "operations",
+        "status": "waiting",
+        "layer": "SPEC",
+        "duration_minutes": 29,
+        "rows_processed": 56380
+      },
+      {
+        "execution_id": "exec-22-0",
+        "execution_date": "2026-10-22",
+        "business_unit": "Comercial",
+        "unit_id": "commerce",
+        "status": "completed",
+        "layer": "SOT",
+        "duration_minutes": 18,
+        "rows_processed": 51160
+      },
+      {
+        "execution_id": "exec-22-1",
+        "execution_date": "2026-10-22",
+        "business_unit": "Financeiro",
+        "unit_id": "finance",
+        "status": "waiting",
+        "layer": "SPEC",
+        "duration_minutes": 25,
+        "rows_processed": 54660
+      },
+      {
+        "execution_id": "exec-22-2",
+        "execution_date": "2026-10-22",
+        "business_unit": "Operações",
+        "unit_id": "operations",
+        "status": "completed",
+        "layer": "SOR",
+        "duration_minutes": 32,
+        "rows_processed": 58160
+      },
+      {
+        "execution_id": "exec-23-0",
+        "execution_date": "2026-10-23",
+        "business_unit": "Comercial",
+        "unit_id": "commerce",
+        "status": "waiting",
+        "layer": "SPEC",
+        "duration_minutes": 21,
+        "rows_processed": 52940
+      },
+      {
+        "execution_id": "exec-23-1",
+        "execution_date": "2026-10-23",
+        "business_unit": "Financeiro",
+        "unit_id": "finance",
+        "status": "completed",
+        "layer": "SOR",
+        "duration_minutes": 28,
+        "rows_processed": 56440
+      },
+      {
+        "execution_id": "exec-23-2",
+        "execution_date": "2026-10-23",
+        "business_unit": "Operações",
+        "unit_id": "operations",
+        "status": "completed",
+        "layer": "SOT",
+        "duration_minutes": 35,
+        "rows_processed": 59940
+      },
+      {
+        "execution_id": "exec-24-0",
+        "execution_date": "2026-10-24",
+        "business_unit": "Comercial",
+        "unit_id": "commerce",
+        "status": "completed",
+        "layer": "SOR",
+        "duration_minutes": 24,
+        "rows_processed": 54720
+      },
+      {
+        "execution_id": "exec-24-1",
+        "execution_date": "2026-10-24",
+        "business_unit": "Financeiro",
+        "unit_id": "finance",
+        "status": "completed",
+        "layer": "SOT",
+        "duration_minutes": 31,
+        "rows_processed": 58220
+      },
+      {
+        "execution_id": "exec-24-2",
+        "execution_date": "2026-10-24",
+        "business_unit": "Operações",
+        "unit_id": "operations",
+        "status": "error",
+        "layer": "SPEC",
+        "duration_minutes": 38,
+        "rows_processed": 61720
+      }
+    ],
+    "units": [
+      {
+        "id": "commerce",
+        "name": "Comercial"
+      },
+      {
+        "id": "finance",
+        "name": "Financeiro"
+      },
+      {
+        "id": "operations",
+        "name": "Operações"
+      }
+    ]
+  }
+}

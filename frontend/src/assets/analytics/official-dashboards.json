@@ -1,0 +1,221 @@
+[
+  {
+    "schemaVersion": 1,
+    "id": "operations",
+    "name": "Operações de dados",
+    "description": "Uma leitura compartilhada da saúde das execuções.",
+    "tags": [
+      "pipelines",
+      "operações"
+    ],
+    "visibility": "official",
+    "published": true,
+    "updatedAt": "2026-11-03T12:00:00-03:00",
+    "sections": [
+      {
+        "id": "pulse",
+        "title": "Pulso operacional",
+        "order": 0,
+        "layout": {
+          "columns": 12,
+          "gap": 12
+        },
+        "modules": [
+          {
+            "id": "total",
+            "visualId": "execution-count",
+            "configuration": {
+              "title": "Execuções no período"
+            },
+            "layout": {
+              "x": 0,
+              "y": 0,
+              "w": 4,
+              "h": 2
+            }
+          },
+          {
+            "id": "volume",
+            "visualId": "processed-rows",
+            "configuration": {
+              "title": "Linhas processadas"
+            },
+            "layout": {
+              "x": 4,
+              "y": 0,
+              "w": 4,
+              "h": 2
+            }
+          },
+          {
+            "id": "duration",
+            "visualId": "average-duration",
+            "configuration": {
+              "title": "Duração média"
+            },
+            "layout": {
+              "x": 8,
+              "y": 0,
+              "w": 4,
+              "h": 2
+            }
+          },
+          {
+            "id": "statuses",
+            "visualId": "status-distribution",
+            "configuration": {
+              "title": "Distribuição por status"
+            },
+            "layout": {
+              "x": 0,
+              "y": 2,
+              "w": 6,
+              "h": 4
+            }
+          },
+          {
+            "id": "trend",
+            "visualId": "daily-executions",
+            "configuration": {
+              "title": "Ritmo das execuções"
+            },
+            "layout": {
+              "x": 6,
+              "y": 2,
+              "w": 6,
+              "h": 4
+            }
+          }
+        ]
+      },
+      {
+        "id": "details",
+        "title": "Do panorama ao detalhe",
+        "order": 1,
+        "layout": {
+          "columns": 12,
+          "gap": 12
+        },
+        "modules": [
+          {
+            "id": "layers",
+            "visualId": "layer-share",
+            "configuration": {
+              "title": "Distribuição por camada"
+            },
+            "layout": {
+              "x": 0,
+              "y": 0,
+              "w": 4,
+              "h": 4
+            }
+          },
+          {
+            "id": "table",
+            "visualId": "executions-table",
+            "configuration": {
+              "title": "Últimas execuções"
+            },
+            "layout": {
+              "x": 4,
+              "y": 0,
+              "w": 8,
+              "h": 4
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "schemaVersion": 1,
+    "id": "business",
+    "name": "Resultados do negócio",
+    "description": "Indicadores demonstrativos para acompanhar receita e canais.",
+    "tags": [
+      "financeiro",
+      "negócio"
+    ],
+    "visibility": "official",
+    "published": true,
+    "updatedAt": "2026-11-03T12:00:00-03:00",
+    "sections": [
+      {
+        "id": "results",
+        "title": "Resultados em perspectiva",
+        "order": 0,
+        "layout": {
+          "columns": 12,
+          "gap": 12
+        },
+        "modules": [
+          {
+            "id": "revenue",
+            "visualId": "revenue-total",
+            "configuration": {
+              "title": "Receita total"
+            },
+            "layout": {
+              "x": 0,
+              "y": 0,
+              "w": 4,
+              "h": 2
+            }
+          },
+          {
+            "id": "cost",
+            "visualId": "cost-total",
+            "configuration": {
+              "title": "Custo total"
+            },
+            "layout": {
+              "x": 4,
+              "y": 0,
+              "w": 4,
+              "h": 2
+            }
+          },
+          {
+            "id": "transactions",
+            "visualId": "finance-count",
+            "configuration": {
+              "title": "Registros financeiros"
+            },
+            "layout": {
+              "x": 8,
+              "y": 0,
+              "w": 4,
+              "h": 2
+            }
+          },
+          {
+            "id": "channels",
+            "visualId": "revenue-by-channel",
+            "configuration": {
+              "title": "Receita por canal"
+            },
+            "layout": {
+              "x": 0,
+              "y": 2,
+              "w": 6,
+              "h": 4
+            }
+          },
+          {
+            "id": "finance-trend",
+            "visualId": "revenue-daily",
+            "configuration": {
+              "title": "Evolução da receita"
+            },
+            "layout": {
+              "x": 6,
+              "y": 2,
+              "w": 6,
+              "h": 4
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

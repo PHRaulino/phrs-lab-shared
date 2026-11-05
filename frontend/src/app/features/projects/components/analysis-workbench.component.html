@@ -1,0 +1,240 @@
+<div class="ai-availability" role="status">
+  <div>
+    <strong>{{
+      store.ready() ? "Provedor disponível" : "IA indisponível"
+    }}</strong>
+    <p>{{ store.aiReason() }}</p>
+  </div>
+  <a routerLink="/projects/ai-settings">Configurar IA ↗</a>
+</div>
+<div class="analysis-workbench">
+  <aside class="context-panel">
+    <p class="eyebrow">CONTEXTO SELECIONADO</p>
+    <h3>{{ feature?.name || project?.name }}</h3>
+    <p class="scope">
+      {{ feature ? "Feature independente" : "Projeto" }}
+    </p>
+    @if (project) {
+      <label class="context-choice"
+        ><input
+          type="checkbox"
+          [(ngModel)]="includeProject"
+          (ngModelChange)="preview.set(null)"
+        />Informações gerais do projeto</label
+      >
+    }
+    @if (feature) {
+      <label class="context-choice"
+        ><input
+          type="checkbox"
+          [(ngModel)]="includeFeature"
+          (ngModelChange)="preview.set(null)"
+        />Informações desta feature</label
+      >
+    }
+    @if (type === "attendance") {
+      <h4>
+        Perguntas para avaliar <span>{{ questions.length }}</span>
+      </h4>
+      @for (item of questions; track item.id) {
+        <label class="context-choice material-choice"
+          ><input
+            type="checkbox"
+            [disabled]="!item.question?.trim()"
+            [checked]="selectedFeatures().has(item.id)"
+            (change)="toggleFeature(item.id)"
+          /><span
+            ><strong>{{ item.name }}</strong
+            ><small>{{
+              item.question || "Configure a pergunta no cadastro desta feature."
+            }}</small></span
+          ></label
+        >
+      }
+      @if (!questions.length) {
+        <p class="empty-note">
+          Vincule ao projeto as features com as perguntas que a IA deve avaliar.
+        </p>
+      }
+    }
+    <h4>
+      Knowledge de apoio <span>{{ materials.length }}</span>
+    </h4>
+    @for (material of materials; track material.id) {
+      <label class="context-choice material-choice"
+        ><input
+          type="checkbox"
+          [checked]="selectedMaterials().has(material.id)"
+          (change)="toggle(material.id, 'material')"
+        /><span
+          ><strong>{{ material.title }}</strong
+          ><small
+            >{{ materialType(material.type) }} ·
+            {{ material.content.length }} caracteres</small
+          ></span
+        ></label
+      >
+    }
+    @if (!materials.length) {
+      <p class="empty-note">
+        Adicione knowledges nesta área antes de preparar uma análise.
+      </p>
+    }
+    <h4>
+      Requisitos existentes <span>{{ requirements.length }}</span>
+    </h4>
+    @for (requirement of requirements; track requirement.id) {
+      <label class="context-choice material-choice"
+        ><input
+          type="checkbox"
+          [checked]="selectedRequirements().has(requirement.id)"
+          (change)="toggle(requirement.id, 'requirement')"
+        /><span
+          ><strong>{{ requirement.title }}</strong
+          ><small>{{
+            requirement.status === "approved" ? "Aprovado" : "Rascunho"
+          }}</small></span
+        ></label
+      >
+    }
+    <button class="secondary" (click)="prepare()">Conferir contexto</button>
+    <p class="privacy-note">
+      Somente os itens selecionados compõem a solicitação. Outros projetos e
+      features ficam de fora.
+    </p>
+  </aside>
+  <div class="interaction-panel">
+    <div class="request-heading">
+      <p class="eyebrow">ANÁLISE DE ATENDIMENTO</p>
+      <h3>Avaliar a conversa</h3>
+    </div>
+    @if (type === "attendance") {
+      <label
+        >Transcrição do atendimento<textarea
+          [(ngModel)]="transcript"
+          (ngModelChange)="preview.set(null)"
+          rows="12"
+          maxlength="200000"
+          placeholder="Cole a transcrição do áudio. Ex.:&#10;Atendente: Como posso ajudar?&#10;Cliente: Preciso de ajuda com minha solicitação."
+        ></textarea>
+      </label>
+      <p class="helper">
+        Informe o texto da conversa, de preferência identificando atendente e
+        cliente. A transcrição do áudio deve estar pronta antes desta etapa.
+      </p>
+    }
+    <label
+      >Tipo de análise<select [(ngModel)]="type">
+        @for (item of types; track item.id) {
+          <option [value]="item.id">{{ item.label }}</option>
+        }
+      </select></label
+    ><label
+      >Instruções adicionais<textarea
+        [(ngModel)]="instruction"
+        rows="6"
+        maxlength="20000"
+        placeholder="O que você quer esclarecer ou aprofundar?"
+      ></textarea>
+    </label>
+    @if (previousId) {
+      <div class="refinement">
+        Refinamento de uma análise anterior. Será criada uma nova versão.<button
+          class="text-button"
+          (click)="previousId = ''"
+        >
+          Remover vínculo
+        </button>
+      </div>
+    }
+    @if (error()) {
+      <p class="error" role="alert">{{ error() }}</p>
+    }
+    <div class="request-actions">
+      <button class="secondary" (click)="prepare()">Revisar contexto</button
+      ><button
+        class="primary-button"
+        [disabled]="!store.ready() || store.analyzing()"
+        (click)="analyze()"
+      >
+        {{ store.analyzing() ? "Analisando…" : "Solicitar análise" }}
+      </button>
+      @if (store.analyzing()) {
+        <button class="text-button" (click)="store.cancelAnalysis()">
+          Cancelar análise
+        </button>
+      }
+    </div>
+    <p class="helper">
+      A IA deve responder a cada pergunta com evidências da conversa e indicar
+      quando a transcrição não trouxer informação suficiente. A execução requer
+      um provedor disponível.
+    </p>
+    @if (preview(); as context) {
+      <details class="context-preview" open>
+        <summary>
+          Contexto preparado ·
+          {{ context.evaluationQuestions?.length || 0 }} perguntas ·
+          {{ context.materials.length }} referências
+        </summary>
+        <pre>{{ context | json }}</pre>
+      </details>
+    }
+    <div class="history-heading">
+      <h3>Histórico desta {{ feature ? "feature" : "análise de projeto" }}</h3>
+      <span>{{ runs.length }} análises</span>
+    </div>
+    <div class="analysis-history">
+      @for (run of runs; track run.id) {
+        <button
+          [class.selected]="selectedRunId() === run.id"
+          (click)="selectRun(run.id)"
+        >
+          <strong>{{ run.type }} · v{{ run.version }}</strong
+          ><small
+            >{{ run.createdAt | date: "dd/MM/yyyy HH:mm" }} ·
+            {{ run.context.materials.length }} knowledges</small
+          >
+        </button>
+      }
+      @if (!runs.length) {
+        <p class="empty-note">
+          Nenhuma análise executada. Os resultados aparecerão aqui quando houver
+          uma integração disponível ou um histórico válido importado.
+        </p>
+      }
+    </div>
+  </div>
+</div>
+<section class="results-panel">
+  @if (selected; as run) {
+    <div class="results-toolbar">
+      <h3>Resultado da análise</h3>
+      <div>
+        <label
+          >Comparar com<select [(ngModel)]="compareId">
+            <option value="">Sem comparação</option>
+            @for (previous of comparable; track previous.id) {
+              <option [value]="previous.id">
+                v{{ previous.version }} ·
+                {{ previous.createdAt | date: "dd/MM HH:mm" }}
+              </option>
+            }
+          </select></label
+        ><button class="secondary" (click)="refine(run)">
+          Refinar esta versão
+        </button>
+      </div>
+    </div>
+    <app-analysis-results [run]="run" [comparison]="comparison" />
+  } @else {
+    <div class="empty-results">
+      <span>✧</span>
+      <h3>Um espaço para novas perspectivas.</h3>
+      <p>
+        Os resultados serão organizados em informações fornecidas, hipóteses,
+        sugestões e questões em aberto.
+      </p>
+    </div>
+  }
+</section>

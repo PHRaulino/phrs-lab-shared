@@ -1,0 +1,168 @@
+<dialog
+  #dialog
+  aria-labelledby="editor-title"
+  aria-describedby="editor-description"
+  (cancel)="close($event)"
+>
+  <form (ngSubmit)="save()" novalidate>
+    <header class="editor-header">
+      <div>
+        <p class="eyebrow">CONFIGURAÇÃO DA TASK</p>
+        <h2 id="editor-title">Editar task.yaml</h2>
+        <p class="editor-task">
+          {{ task.table }} <span>/ {{ task.name }}</span>
+        </p>
+      </div>
+      <button
+        type="button"
+        class="icon-button"
+        aria-label="Fechar editor de task.yaml"
+        (click)="close()"
+      >
+        ×
+      </button>
+    </header>
+    <div class="editor-body">
+      <p id="editor-description" class="local-note">
+        <strong>YAML para o CI</strong> Edite os parâmetros, gere o YAML e copie
+        o conteúdo para substituir no caminho indicado.
+      </p>
+      <div class="file-context">
+        <span>Arquivo de referência</span
+        ><code>{{ task.yamlFile || "task.yaml" }}</code>
+      </div>
+      @if (generatedYaml) {
+        <div class="form-intro">
+          <h3>YAML gerado</h3>
+          <p>Confira o conteúdo antes de copiar para o CI.</p>
+        </div>
+        <textarea
+          class="yaml-preview"
+          aria-label="YAML gerado"
+          [value]="generatedYaml"
+          readonly
+          spellcheck="false"
+          rows="18"
+        ></textarea>
+        @if (copyError) {
+          <p class="export-error" role="alert">{{ copyError }}</p>
+        }
+      } @else {
+        <div class="form-intro">
+          <h3>Parâmetros de processamento</h3>
+          <p>Edite os campos disponíveis na configuração desta task.</p>
+        </div>
+        @for (field of fields; track field.key; let i = $index) {
+          <div class="config-field">
+            <label [for]="'config-field-' + i"
+              ><code>{{ field.key }}</code
+              ><span>{{
+                field.kind === "text"
+                  ? "Texto"
+                  : field.kind === "number"
+                    ? "Número"
+                    : field.kind === "boolean"
+                      ? "Booleano"
+                      : field.kind === "array"
+                        ? "Lista · JSON"
+                        : field.kind === "object"
+                          ? "Objeto · JSON"
+                          : "Nulo"
+              }}</span></label
+            >
+            @if (field.kind === "boolean") {
+              <select
+                [id]="'config-field-' + i"
+                [(ngModel)]="field.value"
+                [ngModelOptions]="{ standalone: true }"
+                (ngModelChange)="changed()"
+                [attr.aria-invalid]="errors[field.key] ? 'true' : null"
+                [attr.aria-describedby]="
+                  errors[field.key] ? 'config-error-' + i : null
+                "
+              >
+                <option value="true">Verdadeiro</option>
+                <option value="false">Falso</option>
+              </select>
+            } @else if (
+              field.kind === "array" ||
+              field.kind === "object" ||
+              field.kind === "null" ||
+              field.key.toLowerCase().includes("sql") ||
+              field.value.includes("\n")
+            ) {
+              <textarea
+                [id]="'config-field-' + i"
+                [(ngModel)]="field.value"
+                [ngModelOptions]="{ standalone: true }"
+                (ngModelChange)="changed()"
+                [rows]="field.kind === 'object' ? 5 : 3"
+                spellcheck="false"
+                [attr.aria-invalid]="errors[field.key] ? 'true' : null"
+                [attr.aria-describedby]="
+                  errors[field.key] ? 'config-error-' + i : null
+                "
+              ></textarea>
+            } @else {
+              <input
+                [id]="'config-field-' + i"
+                [type]="field.kind === 'number' ? 'number' : 'text'"
+                step="any"
+                [ngModel]="field.value"
+                (ngModelChange)="
+                  field.value = $event === null ? '' : '' + $event; changed()
+                "
+                [ngModelOptions]="{ standalone: true }"
+                [attr.aria-invalid]="errors[field.key] ? 'true' : null"
+                [attr.aria-describedby]="
+                  errors[field.key] ? 'config-error-' + i : null
+                "
+              />
+            }
+            @if (errors[field.key]) {
+              <p class="field-error" [id]="'config-error-' + i">
+                {{ errors[field.key] }}
+              </p>
+            }
+          </div>
+        }
+        @if (!fields.length) {
+          <p class="empty-config">
+            Nenhum parâmetro foi fornecido para esta task.
+          </p>
+        }
+      }
+      @if (exportError) {
+        <p class="export-error" role="alert">{{ exportError }}</p>
+      }
+    </div>
+    <footer class="editor-footer">
+      <span aria-live="polite">{{
+        copied
+          ? "YAML copiado para a área de transferência."
+          : "Substitua o conteúdo do task.yaml no CI."
+      }}</span>
+      <div>
+        @if (generatedYaml) {
+          <button type="button" class="cancel-button" (click)="backToForm()">
+            Voltar ao formulário
+          </button>
+          <button type="button" class="primary-button" (click)="copyYaml()">
+            {{ copied ? "✓ Copiado!" : "Copiar YAML" }}
+          </button>
+        } @else {
+          <button type="button" class="cancel-button" (click)="close()">
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            class="primary-button"
+            [disabled]="!fields.length"
+          >
+            Gerar YAML
+          </button>
+        }
+      </div>
+    </footer>
+  </form>
+</dialog>

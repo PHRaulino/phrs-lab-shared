@@ -1,0 +1,158 @@
+<div class="graph-toolbar">
+  <div>
+    <span class="canvas-label">MAPA DE DEPENDÊNCIAS</span
+    ><small>{{ tasks.length }} nós · {{ model().edges.length }} conexões</small>
+  </div>
+  <div class="graph-actions">
+    <button
+      title="Reduzir zoom"
+      aria-label="Reduzir zoom"
+      (click)="zoom(1 / 1.2)"
+    >
+      −</button
+    ><span aria-live="polite">{{ (scale() * 100).toFixed(0) }}%</span
+    ><button
+      title="Aumentar zoom"
+      aria-label="Aumentar zoom"
+      (click)="zoom(1.2)"
+    >
+      +</button
+    ><button title="Ajustar à tela (Home)" (click)="fit()">⛶ Ajustar</button>
+    @if (selectedId) {
+      <button (click)="center(selectedId)" title="Centralizar task selecionada">
+        ⌖ Centralizar
+      </button>
+    }
+  </div>
+</div>
+<div #viewport class="graph-viewport" [class.dragging]="dragging()">
+  @if (!tasks.length) {
+    <div class="graph-empty">
+      <span>⌕</span>
+      <h3>Nenhuma task encontrada</h3>
+      <p>Ajuste os filtros ou limpe a busca para explorar o workflow.</p>
+    </div>
+  }
+  <svg
+    role="group"
+    aria-label="Grafo de dependências. Use as setas para mover, mais e menos para zoom e Home para ajustar. Cada task pode ser selecionada com Enter."
+    tabindex="0"
+    (wheel)="wheel($event)"
+    (pointerdown)="pointerDown($event)"
+    (pointermove)="pointerMove($event)"
+    (pointerup)="pointerUp()"
+    (pointercancel)="pointerUp()"
+    (keydown)="keydown($event)"
+  >
+    <defs>
+      <pattern
+        id="graph-dots"
+        width="18"
+        height="18"
+        patternUnits="userSpaceOnUse"
+      >
+        <circle cx="1" cy="1" r=".7" fill="#d7dfd2" />
+      </pattern>
+      <marker
+        id="graph-arrow"
+        markerWidth="8"
+        markerHeight="8"
+        refX="7"
+        refY="4"
+        orient="auto-start-reverse"
+      >
+        <path d="M 0 1 L 7 4 L 0 7" fill="none" stroke="context-stroke" />
+      </marker>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#graph-dots)" />
+    <g [attr.transform]="transform()" [class.low-detail]="scale() < 0.5">
+      @for (column of model().columns; track column.wave) {
+        <g class="wave-column">
+          <rect
+            [attr.x]="column.x"
+            y="22"
+            [attr.width]="column.width"
+            [attr.height]="model().height - 25"
+            rx="12"
+            [attr.fill]="column.wave % 2 === 0 ? '#edf1e7' : '#f3f5ee'"
+          />
+          <text [attr.x]="column.x + 17" y="49">ONDA {{ column.wave }}</text>
+        </g>
+      }
+      @for (edge of model().edges; track edge.id) {
+        <path
+          class="edge"
+          [class.highlight]="edgeHighlight(edge.from, edge.to)"
+          [class.upstream-edge]="edge.to === selectedId"
+          [class.downstream-edge]="edge.from === selectedId"
+          [class.dimmed]="selectedId && !edgeHighlight(edge.from, edge.to)"
+          [attr.d]="edge.path"
+          marker-end="url(#graph-arrow)"
+        />
+      }
+      @for (node of model().nodes; track node.task.id) {
+        <g
+          class="task-node"
+          data-task="true"
+          [attr.data-task-id]="node.task.id"
+          [attr.transform]="'translate(' + node.x + ' ' + node.y + ')'"
+          [attr.data-status]="node.task.status"
+          [class.selected]="selectedId === node.task.id"
+          [class.upstream]="upstream.has(node.task.id)"
+          [class.downstream]="downstream.has(node.task.id)"
+          [class.dimmed]="muted(node.task)"
+          [attr.aria-label]="
+            node.task.name +
+            ', ' +
+            labels[node.task.status].label +
+            ', onda ' +
+            node.task.wave
+          "
+          [attr.aria-pressed]="selectedId === node.task.id"
+          tabindex="0"
+          role="button"
+          (click)="selected.emit(node.task.id)"
+          (keydown)="selectKey($event, node.task.id)"
+        >
+          <title>
+            {{ node.task.name }} | {{ labels[node.task.status].label }} |
+            {{ node.task.businessUnit }} / {{ node.task.layer }} |
+            {{ node.task.dependencies.length }} dependências
+          </title>
+          <rect class="node-body" width="204" height="76" rx="8" />
+          <rect class="status-stripe" width="4" height="50" y="13" rx="2" />
+          <text class="node-title" x="15" y="24">
+            {{
+              node.task.name.length > 24
+                ? node.task.name.slice(0, 22) + "…"
+                : node.task.name
+            }}
+          </text>
+          <text class="node-layer" x="15" y="42">
+            {{ node.task.layer }} · {{ node.task.businessUnit }}
+          </text>
+          <text class="node-status" x="15" y="62">
+            {{ labels[node.task.status].icon }}
+            {{ labels[node.task.status].label }}
+          </text>
+          <circle class="running-dot" cx="187" cy="58" r="3" />
+        </g>
+      }
+    </g>
+  </svg>
+  <div class="canvas-hint">
+    Arraste para mover · Role para zoom · Enter para selecionar
+  </div>
+</div>
+<div class="graph-footer">
+  <span>{{
+    model().hiddenEdges
+      ? model().hiddenEdges +
+        " dependências fora dos filtros; veja os detalhes da task."
+      : "Dependências fornecidas pela fonte de dados."
+  }}</span
+  ><span class="relation-legend"
+    >● Selecionada <i class="upstream-color">● Dependência</i
+    ><i class="downstream-color">● Dependente</i></span
+  >
+</div>

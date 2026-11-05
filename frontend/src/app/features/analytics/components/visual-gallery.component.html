@@ -1,0 +1,84 @@
+<div class="gallery-filters">
+  <label
+    >Buscar visual<input
+      type="search"
+      placeholder="Nome ou descrição…"
+      [ngModel]="gallerySearch()"
+      (ngModelChange)="gallerySearch.set($event)" /></label
+  ><label
+    >Categoria<select
+      [ngModel]="galleryCategory()"
+      (ngModelChange)="galleryCategory.set($event)"
+    >
+      <option value="">Todas</option>
+      @for (category of categories; track category) {
+        <option>{{ category }}</option>
+      }
+    </select></label
+  ><label
+    >Tag<select
+      [ngModel]="galleryTag()"
+      (ngModelChange)="galleryTag.set($event)"
+    >
+      <option value="">Todas</option>
+      @for (tag of tags; track tag) {
+        <option>{{ tag }}</option>
+      }
+    </select></label
+  >
+</div>
+<div class="visual-gallery">
+  @for (visual of gallery(); track visual.id) {
+    <article class="visual-tile">
+      <div class="tile-preview" [attr.data-kind]="visual.query.kind">
+        <span>{{
+          visual.query.kind === "kpi"
+            ? "12.480"
+            : visual.query.kind === "table"
+              ? "▤"
+              : visual.query.kind === "line"
+                ? "⌁"
+                : visual.query.kind === "donut"
+                  ? "◉"
+                  : "▥"
+        }}</span
+        ><small>{{ visual.category }} · v{{ visual.version }}</small>
+      </div>
+      <div class="tile-content">
+        <h3>{{ visual.name }}</h3>
+        <p>{{ visual.description }}</p>
+        <div class="tile-tags">
+          @for (tag of visual.tags; track tag) {
+            <span>{{ tag }}</span>
+          }
+        </div>
+        <dl>
+          <dt>Datasets</dt>
+          <dd>{{ visual.datasets.join(", ") }}</dd>
+          <dt>Filtros</dt>
+          <dd>
+            @for (filter of visual.filters; track filter.semanticId) {
+              <span>{{ filter.label }} · </span>
+            }
+          </dd>
+          <dt>Dimensões</dt>
+          <dd>
+            Mín. {{ visual.layout.minW }} × {{ visual.layout.minH }} · Padrão
+            {{ visual.layout.defaultW }} ×
+            {{ visual.layout.defaultH }}
+          </dd>
+        </dl>
+        <div class="tile-actions">
+          <button class="text-button" (click)="previewed.emit(visual)">
+            Ver prévia</button
+          ><button class="secondary-button" (click)="added.emit(visual)">
+            Adicionar à composição
+          </button>
+        </div>
+      </div>
+    </article>
+  }
+  @if (!gallery().length) {
+    <p class="empty-message">Nenhum visual corresponde à busca.</p>
+  }
+</div>

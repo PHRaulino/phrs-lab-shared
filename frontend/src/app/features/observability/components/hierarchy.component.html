@@ -1,0 +1,141 @@
+<div class="panel-heading">
+  <div>
+    <h2>Explorador</h2>
+    <p class="explorer-subtitle">Tabelas por unidade e camada</p>
+  </div>
+  <button
+    class="text-button"
+    (click)="collapsed.emit()"
+    aria-label="Recolher hierarquia"
+  >
+    ⇤
+  </button>
+</div>
+<div class="tree">
+  @for (unit of tree(); track unit.name) {
+    <details open class="unit">
+      <summary>
+        <span class="level-name">{{ unit.name }}</span
+        ><small>{{ unit.count }} tasks</small>
+      </summary>
+      @for (layer of unit.layers; track layer.name) {
+        <details open class="layer">
+          <summary>
+            <span class="layer-name">{{ layer.name }}</span
+            ><small
+              >{{ layer.tables.length }}
+              {{ layer.tables.length === 1 ? "tabela" : "tabelas" }}</small
+            >
+          </summary>
+          <div class="table-list">
+            @for (table of layer.tables; track table.name) {
+              @if (table.tasks.length === 1) {
+                @for (task of table.tasks; track task.id) {
+                  <div
+                    class="table-row"
+                    [class.selected]="selectedId === task.id"
+                    [class.failed]="task.status === 'error'"
+                  >
+                    <button
+                      class="table-select"
+                      [attr.aria-pressed]="selectedId === task.id"
+                      (click)="selected.emit(task.id)"
+                      [title]="table.name + ' · Task: ' + task.name"
+                    >
+                      <span class="table-title"
+                        ><svg
+                          aria-hidden="true"
+                          viewBox="0 0 20 20"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="1.3"
+                        >
+                          <rect x="2.5" y="3" width="15" height="14" rx="2" />
+                          <path d="M3 8h14M8 8v9" /></svg
+                        ><strong>{{ table.label }}</strong></span
+                      >
+                      <span class="table-namespace">{{
+                        table.namespace || "Tabela"
+                      }}</span>
+                      <app-status-badge [status]="task.status" />
+                      @if (task.name !== table.label) {
+                        <span class="task-file">Task: {{ task.name }}</span>
+                      }</button
+                    ><button
+                      class="edit-table"
+                      (click)="editRequested.emit(task.id)"
+                      [attr.aria-label]="
+                        'Editar task.yaml de ' +
+                        table.name +
+                        (table.tasks.length > 1 ? ' - ' + task.name : '')
+                      "
+                      title="Editar task.yaml"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        viewBox="0 0 20 20"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.4"
+                      >
+                        <path d="m12 3 5 5-9 9H3v-5zM10 5l5 5" />
+                      </svg>
+                    </button>
+                  </div>
+                }
+              } @else {
+                <details class="multi-table" open>
+                  <summary [title]="table.name">
+                    <strong>{{ table.label }}</strong
+                    ><small>{{ table.tasks.length }} tasks</small>
+                  </summary>
+                  <p class="table-namespace">{{ table.namespace }}</p>
+                  @for (task of table.tasks; track task.id) {
+                    <div
+                      class="table-row"
+                      [class.selected]="selectedId === task.id"
+                      [class.failed]="task.status === 'error'"
+                    >
+                      <button
+                        class="table-select"
+                        (click)="selected.emit(task.id)"
+                        [attr.aria-pressed]="selectedId === task.id"
+                      >
+                        <span class="table-title"
+                          ><strong>{{ task.name }}</strong></span
+                        ><span class="task-file">task.yaml</span
+                        ><app-status-badge [status]="task.status" /></button
+                      ><button
+                        class="edit-table"
+                        (click)="editRequested.emit(task.id)"
+                        [attr.aria-label]="
+                          'Editar task.yaml de ' +
+                          table.name +
+                          (table.tasks.length > 1 ? ' - ' + task.name : '')
+                        "
+                        title="Editar task.yaml"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          viewBox="0 0 20 20"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="1.4"
+                        >
+                          <path d="m12 3 5 5-9 9H3v-5zM10 5l5 5" />
+                        </svg>
+                      </button>
+                    </div>
+                  }
+                </details>
+              }
+            }
+          </div>
+        </details>
+      }
+    </details>
+  }
+  @if (!tasks.length) {
+    <p class="empty-tree">Nenhuma tabela corresponde aos filtros.</p>
+  }
+</div>

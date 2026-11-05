@@ -1,0 +1,260 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+.graph-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 65px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line);
+  flex-wrap: wrap;
+}
+.canvas-label {
+  font-size: 9px;
+  font-weight: 650;
+  letter-spacing: 1.2px;
+}
+.graph-toolbar small {
+  display: block;
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 5px;
+}
+.graph-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.graph-actions button {
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  min-width: 28px;
+  height: 28px;
+  font-size: 11px;
+  color: var(--ink);
+}
+.graph-actions button:hover {
+  background: #eaf0e2;
+}
+.graph-actions span {
+  font-size: 10px;
+  min-width: 35px;
+  text-align: center;
+}
+.graph-viewport {
+  height: 536px;
+  position: relative;
+  background: #fafbf8;
+  overflow: hidden;
+}
+svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  touch-action: none;
+  cursor: grab;
+}
+.dragging svg {
+  cursor: grabbing;
+}
+.wave-column text {
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  font-weight: 600;
+  fill: #727f67;
+}
+.wave-column rect {
+  opacity: 0.8;
+}
+.edge {
+  fill: none;
+  stroke: #aab8a0;
+  stroke-width: 1.4;
+}
+.edge.highlight {
+  stroke-width: 2.5;
+}
+.edge.upstream-edge {
+  stroke: #8074b0;
+}
+.edge.downstream-edge {
+  stroke: #4a91a4;
+}
+.task-node {
+  cursor: pointer;
+  --node-status: #8a9486;
+  outline: none;
+}
+.node-body {
+  fill: #fff;
+  stroke: #d9e0d2;
+  stroke-width: 1;
+  filter: drop-shadow(0 2px 2px #20352206);
+}
+.task-node:hover .node-body,
+.task-node:focus-visible .node-body {
+  stroke: #284d36;
+  stroke-width: 2;
+}
+.task-node.selected .node-body {
+  stroke: #294e37;
+  stroke-width: 3;
+  fill: #f0f5e8;
+}
+.task-node.upstream .node-body {
+  stroke: #8074b0;
+  stroke-width: 2;
+}
+.task-node.downstream .node-body {
+  stroke: #4a91a4;
+  stroke-width: 2;
+}
+.status-stripe {
+  fill: var(--node-status);
+}
+.node-title {
+  font-size: 11px;
+  font-weight: 650;
+  fill: #2e3e30;
+}
+.node-layer {
+  font-size: 9px;
+  fill: #7a8374;
+}
+.node-status {
+  font-size: 9px;
+  fill: var(--node-status);
+}
+.task-node[data-status="completed"] {
+  --node-status: #52794b;
+}
+.task-node[data-status="running"] {
+  --node-status: #227f94;
+}
+.task-node[data-status="error"] {
+  --node-status: #be4141;
+}
+.task-node[data-status="error"] .node-body {
+  fill: #fff6f4;
+  stroke: #e7b4ac;
+}
+.task-node[data-status="waiting"] {
+  --node-status: #a97c2a;
+}
+.task-node[data-status="cancelled"] {
+  --node-status: #817580;
+}
+.running-dot {
+  display: none;
+  fill: var(--node-status);
+}
+.task-node[data-status="running"] .running-dot {
+  display: block;
+  animation: pulse 1.8s ease-in-out infinite;
+}
+.dimmed {
+  opacity: 0.22;
+}
+.low-detail .node-layer {
+  display: none;
+}
+.low-detail .node-title {
+  font-size: 14px;
+}
+.low-detail .node-status {
+  font-size: 12px;
+}
+.low-detail .edge {
+  stroke-width: 2;
+}
+.canvas-hint {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  pointer-events: none;
+  background: #fffffff0;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 7px 13px;
+  color: #7b8473;
+  font-size: 9px;
+}
+.graph-footer {
+  min-height: 40px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 9px;
+  color: var(--muted);
+  border-top: 1px solid var(--line);
+}
+.relation-legend {
+  color: #355a39;
+  display: flex;
+  gap: 9px;
+}
+.relation-legend i {
+  font-style: normal;
+}
+.upstream-color {
+  color: #8074b0;
+}
+.downstream-color {
+  color: #4a91a4;
+}
+.graph-empty {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  padding: 25px;
+  pointer-events: none;
+  z-index: 1;
+}
+.graph-empty > span {
+  font-size: 34px;
+  color: #8e9e7c;
+}
+.graph-empty h3 {
+  font-weight: 500;
+  font-size: 18px;
+}
+.graph-empty p {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+@keyframes pulse {
+  50% {
+    opacity: 0.25;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .running-dot {
+    animation: none !important;
+  }
+}
+@media (max-width: 650px) {
+  .graph-viewport {
+    height: 460px;
+  }
+  .canvas-hint {
+    display: none;
+  }
+}
+
+.task-node.selected .node-body {
+  stroke: #294e37;
+  stroke-width: 3;
+}

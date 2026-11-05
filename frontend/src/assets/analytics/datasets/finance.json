@@ -1,0 +1,582 @@
+{
+  "tables": {
+    "results": [
+      {
+        "id": "finance-1-0",
+        "date": "2026-10-01",
+        "business_unit": "Comercial",
+        "revenue": 18510,
+        "cost": 9210,
+        "channel": "Parceiros"
+      },
+      {
+        "id": "finance-1-1",
+        "date": "2026-10-01",
+        "business_unit": "Financeiro",
+        "revenue": 19240,
+        "cost": 9590,
+        "channel": "Digital"
+      },
+      {
+        "id": "finance-1-2",
+        "date": "2026-10-01",
+        "business_unit": "Operações",
+        "revenue": 19970,
+        "cost": 9970,
+        "channel": "Direto"
+      },
+      {
+        "id": "finance-2-0",
+        "date": "2026-10-02",
+        "business_unit": "Comercial",
+        "revenue": 19020,
+        "cost": 9420,
+        "channel": "Digital"
+      },
+      {
+        "id": "finance-2-1",
+        "date": "2026-10-02",
+        "business_unit": "Financeiro",
+        "revenue": 19750,
+        "cost": 9800,
+        "channel": "Direto"
+      },
+      {
+        "id": "finance-2-2",
+        "date": "2026-10-02",
+        "business_unit": "Operações",
+        "revenue": 20480,
+        "cost": 10180,
+        "channel": "Parceiros"
+      },
+      {
+        "id": "finance-3-0",
+        "date": "2026-10-03",
+        "business_unit": "Comercial",
+        "revenue": 19530,
+        "cost": 9630,
+        "channel": "Direto"
+      },
+      {
+        "id": "finance-3-1",
+        "date": "2026-10-03",
+        "business_unit": "Financeiro",
+        "revenue": 20260,
+        "cost": 10010,
+        "channel": "Parceiros"
+      },
+      {
+        "id": "finance-3-2",
+        "date": "2026-10-03",
+        "business_unit": "Operações",
+        "revenue": 20990,
+        "cost": 10390,
+        "channel": "Digital"
+      },
+      {
+        "id": "finance-4-0",
+        "date": "2026-10-04",
+        "business_unit": "Comercial",
+        "revenue": 20040,
+        "cost": 9840,
+        "channel": "Parceiros"
+      },
+      {
+        "id": "finance-4-1",
+        "date": "2026-10-04",
+        "business_unit": "Financeiro",
+        "revenue": 20770,
+        "cost": 10220,
+        "channel": "Digital"
+      },
+      {
+        "id": "finance-4-2",
+        "date": "2026-10-04",
+        "business_unit": "Operações",
+        "revenue": 21500,
+        "cost": 10600,
+        "channel": "Direto"
+      },
+      {
+        "id": "finance-5-0",
+        "date": "2026-10-05",
+        "business_unit": "Comercial",
+        "revenue": 20550,
+        "cost": 10050,
+        "channel": "Digital"
+      },
+      {
+        "id": "finance-5-1",
+        "date": "2026-10-05",
+        "business_unit": "Financeiro",
+        "revenue": 21280,
+        "cost": 10430,
+        "channel": "Direto"
+      },
+      {
+        "id": "finance-5-2",
+        "date": "2026-10-05",
+        "business_unit": "Operações",
+        "revenue": 22010,
+        "cost": 10810,
+        "channel": "Parceiros"
+      },
+      {
+        "id": "finance-6-0",
+        "date": "2026-10-06",
+        "business_unit": "Comercial",
+        "revenue": 21060,
+        "cost": 10260,
+        "channel": "Direto"
+      },
+      {
+        "id": "finance-6-1",
+        "date": "2026-10-06",
+        "business_unit": "Financeiro",
+        "revenue": 21790,
+        "cost": 10640,
+        "channel": "Parceiros"
+      },
+      {
+        "id": "finance-6-2",
+        "date": "2026-10-06",
+        "business_unit": "Operações",
+        "revenue": 22520,
+        "cost": 11020,
+        "channel": "Digital"
+      },
+      {
+        "id": "finance-7-0",
+        "date": "2026-10-07",
+        "business_unit": "Comercial",
+        "revenue": 21570,
+        "cost": 10470,
+        "channel": "Parceiros"
+      },
+      {
+        "id": "finance-7-1",
+        "date": "2026-10-07",
+        "business_unit": "Financeiro",
+        "revenue": 22300,
+        "cost": 10850,
+        "channel": "Digital"
+      },
+      {
+        "id": "finance-7-2",
+        "date": "2026-10-07",
+        "business_unit": "Operações",
+        "revenue": 23030,
+        "cost": 11230,
+        "channel": "Direto"
+      },
+      {
+        "id": "finance-8-0",
+        "date": "2026-10-08",
+        "business_unit": "Comercial",
+        "revenue": 22080,
+        "cost": 10680,
+        "channel": "Digital"
+      },
+      {
+        "id": "finance-8-1",
+        "date": "2026-10-08",
+        "business_unit": "Financeiro",
+        "revenue": 22810,
+        "cost": 11060,
+        "channel": "Direto"
+      },
+      {
+        "id": "finance-8-2",
+        "date": "2026-10-08",
+        "business_unit": "Operações",
+        "revenue": 23540,
+        "cost": 11440,
+        "channel": "Parceiros"
+      },
+      {
+        "id": "finance-9-0",
+        "date": "2026-10-09",
+        "business_unit": "Comercial",
+        "revenue": 22590,
+        "cost": 10890,
+        "channel": "Direto"
+      },
+      {
+        "id": "finance-9-1",
+        "date": "2026-10-09",
+        "business_unit": "Financeiro",
+        "revenue": 23320,
+        "cost": 11270,
+        "channel": "Parceiros"
+      },
+      {
+        "id": "finance-9-2",
+        "date": "2026-10-09",
+        "business_unit": "Operações",
+        "revenue": 24050,
+        "cost": 11650,
+        "channel": "Digital"
+      },
+      {
+        "id": "finance-10-0",
+        "date": "2026-10-10",
+        "business_unit": "Comercial",
+        "revenue": 23100,
+        "cost": 11100,
+        "channel": "Parceiros"
+      },
+      {
+        "id": "finance-10-1",
+        "date": "2026-10-10",
+        "business_unit": "Financeiro",
+        "revenue": 23830,
+        "cost": 11480,
+        "channel": "Digital"
+      },
+      {
+        "id": "finance-10-2",
+        "date": "2026-10-10",
+        "business_unit": "Operações",
+        "revenue": 24560,
+        "cost": 11860,
+        "channel": "Direto"
+      },
+      {
+        "id": "finance-11-0",
+        "date": "2026-10-11",
+        "business_unit": "Comercial",
+        "revenue": 23610,
+        "cost": 11310,
+        "channel": "Digital"
+      },
+      {
+        "id": "finance-11-1",
+        "date": "2026-10-11",
+        "business_unit": "Financeiro",
+        "revenue": 24340,
+        "cost": 11690,
+        "channel": "Direto"
+      },
+      {
+        "id": "finance-11-2",
+        "date": "2026-10-11",
+        "business_unit": "Operações",
+        "revenue": 25070,
+        "cost": 12070,
+        "channel": "Parceiros"
+      },
+      {
+        "id": "finance-12-0",
+        "date": "2026-10-12",
+        "business_unit": "Comercial",
+        "revenue": 24120,
+        "cost": 11520,
+        "channel": "Direto"
+      },
+      {
+        "id": "finance-12-1",
+        "date": "2026-10-12",
+        "business_unit": "Financeiro",
+        "revenue": 24850,
+        "cost": 11900,
+        "channel": "Parceiros"
+      },
+      {
+        "id": "finance-12-2",
+        "date": "2026-10-12",
+        "business_unit": "Operações",
+        "revenue": 25580,
+        "cost": 12280,
+        "channel": "Digital"
+      },
+      {
+        "id": "finance-13-0",
+        "date": "2026-10-13",
+        "business_unit": "Comercial",
+        "revenue": 24630,
+        "cost": 11730,
+        "channel": "Parceiros"
+      },
+      {
+        "id": "finance-13-1",
+        "date": "2026-10-13",
+        "business_unit": "Financeiro",
+        "revenue": 25360,
+        "cost": 12110,
+        "channel": "Digital"
+      },
+      {
+        "id": "finance-13-2",
+        "date": "2026-10-13",
+        "business_unit": "Operações",
+        "revenue": 26090,
+        "cost": 12490,
+        "channel": "Direto"
+      },
+      {
+        "id": "finance-14-0",
+        "date": "2026-10-14",
+        "business_unit": "Comercial",
+        "revenue": 25140,
+        "cost": 11940,
+        "channel": "Digital"
+      },
+      {
+        "id": "finance-14-1",
+        "date": "2026-10-14",
+        "business_unit": "Financeiro",
+        "revenue": 25870,
+        "cost": 12320,
+        "channel": "Direto"
+      },
+      {
+        "id": "finance-14-2",
+        "date": "2026-10-14",
+        "business_unit": "Operações",
+        "revenue": 26600,
+        "cost": 12700,
+        "channel": "Parceiros"
+      },
+      {
+        "id": "finance-15-0",
+        "date": "2026-10-15",
+        "business_unit": "Comercial",
+        "revenue": 25650,
+        "cost": 12150,
+        "channel": "Direto"
+      },
+      {
+        "id": "finance-15-1",
+        "date": "2026-10-15",
+        "business_unit": "Financeiro",
+        "revenue": 26380,
+        "cost": 12530,
+        "channel": "Parceiros"
+      },
+      {
+        "id": "finance-15-2",
+        "date": "2026-10-15",
+        "business_unit": "Operações",
+        "revenue": 27110,
+        "cost": 12910,
+        "channel": "Digital"
+      },
+      {
+        "id": "finance-16-0",
+        "date": "2026-10-16",
+        "business_unit": "Comercial",
+        "revenue": 26160,
+        "cost": 12360,
+        "channel": "Parceiros"
+      },
+      {
+        "id": "finance-16-1",
+        "date": "2026-10-16",
+        "business_unit": "Financeiro",
+        "revenue": 26890,
+        "cost": 12740,
+        "channel": "Digital"
+      },
+      {
+        "id": "finance-16-2",
+        "date": "2026-10-16",
+        "business_unit": "Operações",
+        "revenue": 27620,
+        "cost": 13120,
+        "channel": "Direto"
+      },
+      {
+        "id": "finance-17-0",
+        "date": "2026-10-17",
+        "business_unit": "Comercial",
+        "revenue": 26670,
+        "cost": 12570,
+        "channel": "Digital"
+      },
+      {
+        "id": "finance-17-1",
+        "date": "2026-10-17",
+        "business_unit": "Financeiro",
+        "revenue": 27400,
+        "cost": 12950,
+        "channel": "Direto"
+      },
+      {
+        "id": "finance-17-2",
+        "date": "2026-10-17",
+        "business_unit": "Operações",
+        "revenue": 28130,
+        "cost": 13330,
+        "channel": "Parceiros"
+      },
+      {
+        "id": "finance-18-0",
+        "date": "2026-10-18",
+        "business_unit": "Comercial",
+        "revenue": 27180,
+        "cost": 12780,
+        "channel": "Direto"
+      },
+      {
+        "id": "finance-18-1",
+        "date": "2026-10-18",
+        "business_unit": "Financeiro",
+        "revenue": 27910,
+        "cost": 13160,
+        "channel": "Parceiros"
+      },
+      {
+        "id": "finance-18-2",
+        "date": "2026-10-18",
+        "business_unit": "Operações",
+        "revenue": 28640,
+        "cost": 13540,
+        "channel": "Digital"
+      },
+      {
+        "id": "finance-19-0",
+        "date": "2026-10-19",
+        "business_unit": "Comercial",
+        "revenue": 27690,
+        "cost": 12990,
+        "channel": "Parceiros"
+      },
+      {
+        "id": "finance-19-1",
+        "date": "2026-10-19",
+        "business_unit": "Financeiro",
+        "revenue": 28420,
+        "cost": 13370,
+        "channel": "Digital"
+      },
+      {
+        "id": "finance-19-2",
+        "date": "2026-10-19",
+        "business_unit": "Operações",
+        "revenue": 29150,
+        "cost": 13750,
+        "channel": "Direto"
+      },
+      {
+        "id": "finance-20-0",
+        "date": "2026-10-20",
+        "business_unit": "Comercial",
+        "revenue": 28200,
+        "cost": 13200,
+        "channel": "Digital"
+      },
+      {
+        "id": "finance-20-1",
+        "date": "2026-10-20",
+        "business_unit": "Financeiro",
+        "revenue": 28930,
+        "cost": 13580,
+        "channel": "Direto"
+      },
+      {
+        "id": "finance-20-2",
+        "date": "2026-10-20",
+        "business_unit": "Operações",
+        "revenue": 29660,
+        "cost": 13960,
+        "channel": "Parceiros"
+      },
+      {
+        "id": "finance-21-0",
+        "date": "2026-10-21",
+        "business_unit": "Comercial",
+        "revenue": 28710,
+        "cost": 13410,
+        "channel": "Direto"
+      },
+      {
+        "id": "finance-21-1",
+        "date": "2026-10-21",
+        "business_unit": "Financeiro",
+        "revenue": 29440,
+        "cost": 13790,
+        "channel": "Parceiros"
+      },
+      {
+        "id": "finance-21-2",
+        "date": "2026-10-21",
+        "business_unit": "Operações",
+        "revenue": 30170,
+        "cost": 14170,
+        "channel": "Digital"
+      },
+      {
+        "id": "finance-22-0",
+        "date": "2026-10-22",
+        "business_unit": "Comercial",
+        "revenue": 29220,
+        "cost": 13620,
+        "channel": "Parceiros"
+      },
+      {
+        "id": "finance-22-1",
+        "date": "2026-10-22",
+        "business_unit": "Financeiro",
+        "revenue": 29950,
+        "cost": 14000,
+        "channel": "Digital"
+      },
+      {
+        "id": "finance-22-2",
+        "date": "2026-10-22",
+        "business_unit": "Operações",
+        "revenue": 30680,
+        "cost": 14380,
+        "channel": "Direto"
+      },
+      {
+        "id": "finance-23-0",
+        "date": "2026-10-23",
+        "business_unit": "Comercial",
+        "revenue": 29730,
+        "cost": 13830,
+        "channel": "Digital"
+      },
+      {
+        "id": "finance-23-1",
+        "date": "2026-10-23",
+        "business_unit": "Financeiro",
+        "revenue": 30460,
+        "cost": 14210,
+        "channel": "Direto"
+      },
+      {
+        "id": "finance-23-2",
+        "date": "2026-10-23",
+        "business_unit": "Operações",
+        "revenue": 31190,
+        "cost": 14590,
+        "channel": "Parceiros"
+      },
+      {
+        "id": "finance-24-0",
+        "date": "2026-10-24",
+        "business_unit": "Comercial",
+        "revenue": 30240,
+        "cost": 14040,
+        "channel": "Direto"
+      },
+      {
+        "id": "finance-24-1",
+        "date": "2026-10-24",
+        "business_unit": "Financeiro",
+        "revenue": 30970,
+        "cost": 14420,
+        "channel": "Parceiros"
+      },
+      {
+        "id": "finance-24-2",
+        "date": "2026-10-24",
+        "business_unit": "Operações",
+        "revenue": 31700,
+        "cost": 14800,
+        "channel": "Digital"
+      }
+    ]
+  }
+}

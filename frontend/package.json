@@ -1,0 +1,44 @@
+{
+  "name": "phrs-lab-frontend",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "ng serve",
+    "start:real": "ng serve --configuration real",
+    "build": "ng build",
+    "build:dev": "ng build --configuration development",
+    "test": "node --import tsx --test tests/*.test.ts",
+    "mock:init": "msw init src --save"
+  },
+  "engines": {
+    "node": "^18.13.0 || ^20.9.0"
+  },
+  "dependencies": {
+    "@angular/animations": "17.3.11",
+    "@angular/common": "17.3.11",
+    "@angular/compiler": "17.3.11",
+    "@angular/core": "17.3.11",
+    "@angular/forms": "17.3.11",
+    "@angular/platform-browser": "17.3.11",
+    "@angular/platform-browser-dynamic": "17.3.11",
+    "@angular/router": "17.3.11",
+    "rxjs": "7.8.1",
+    "tslib": "2.6.2",
+    "yaml": "2.9.1",
+    "zone.js": "0.14.10"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "17.3.11",
+    "@angular/cli": "17.3.11",
+    "@angular/compiler-cli": "17.3.11",
+    "@types/node": "20.17.24",
+    "msw": "2.7.3",
+    "tsx": "4.19.3",
+    "typescript": "5.4.5"
+  },
+  "msw": {
+    "workerDirectory": [
+      "src"
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+<article class="project-card">
+  <div class="card-top">
+    <span class="project-symbol">▱</span
+    ><span class="status" [attr.data-status]="project.status">{{
+      projectStatus(project.status)
+    }}</span>
+  </div>
+  <a [routerLink]="['/projects', project.id]"
+    ><h2>{{ project.name }}</h2></a
+  >
+  <p>
+    {{
+      project.description ||
+        "Adicione uma descrição para compartilhar o propósito desta iniciativa."
+    }}
+  </p>
+  <div class="progress-caption">
+    <span
+      >{{ featureCount }}
+      {{ featureCount === 1 ? "feature" : "features" }}</span
+    ><span>{{ project.knowledgeIds?.length || 0 }} knowledges diretos</span>
+  </div>
+  <div class="progress">
+    <span [style.width.%]="progress"></span>
+  </div>
+  <footer>
+    <small>Atualizado em {{ project.updatedAt | date: "dd/MM/yyyy" }}</small>
+    <div>
+      <button
+        class="text-button"
+        [attr.aria-label]="'Editar projeto ' + project.name"
+        (click)="edited.emit()"
+      >
+        ✎</button
+      ><button
+        class="text-button danger"
+        [attr.aria-label]="'Excluir projeto ' + project.name"
+        (click)="deleted.emit()"
+      >
+        ×
+      </button>
+    </div>
+  </footer>
+</article>

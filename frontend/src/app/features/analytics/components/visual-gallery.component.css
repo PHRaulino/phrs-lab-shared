@@ -1,0 +1,123 @@
+.gallery-filters {
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  margin: 22px 0;
+  flex-wrap: wrap;
+}
+.gallery-filters label {
+  display: grid;
+  gap: 7px;
+  font-size: 10px;
+  color: var(--muted);
+  flex: 1;
+  min-width: 140px;
+}
+.gallery-filters label:first-child {
+  flex: 2;
+}
+.visual-gallery {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+.visual-tile {
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: white;
+  overflow: hidden;
+}
+.tile-preview {
+  height: 125px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 12px;
+  background: #edf2e3;
+  border-bottom: 1px solid var(--line);
+}
+.tile-preview > span {
+  font-size: 37px;
+  letter-spacing: -1px;
+  color: #8da571;
+}
+.tile-preview > small {
+  font-size: 8px;
+  letter-spacing: 1px;
+  color: #899b71;
+}
+.tile-preview[data-kind="line"],
+.tile-preview[data-kind="bar"] {
+  background: #eef2eb;
+}
+.tile-content {
+  padding: 20px;
+}
+.tile-content h3 {
+  font-size: 14px;
+  font-weight: 550;
+  margin: 0 0 10px;
+}
+.tile-content p {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.7;
+  min-height: 36px;
+}
+.tile-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin: 13px 0 18px;
+}
+.tile-tags span {
+  font-size: 8px;
+  background: #f0f4e9;
+  color: #849672;
+  padding: 4px 7px;
+  border-radius: 4px;
+}
+.tile-content dl {
+  display: grid;
+  grid-template-columns: 65px 1fr;
+  gap: 10px;
+  font-size: 9px;
+  line-height: 1.7;
+}
+.tile-content dt {
+  color: #97a28c;
+}
+.tile-content dd {
+  margin: 0;
+  color: #718164;
+}
+.tile-actions {
+  border-top: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 17px;
+  padding-top: 16px;
+}
+.tile-actions button {
+  font-size: 10px;
+}
+.empty-message {
+  font-size: 12px;
+  color: var(--muted);
+}
+.visual-gallery {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+@media (max-width: 1100px) {
+  .visual-gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 650px) {
+  .visual-gallery {
+    grid-template-columns: 1fr;
+  }
+}

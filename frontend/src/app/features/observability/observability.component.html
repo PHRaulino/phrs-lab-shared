@@ -1,0 +1,273 @@
+<div class="page-topline">
+  <span>Workspace <span class="slash">/</span> Orquestrador de pipelines</span
+  ><span class="readonly">◈ Execuções somente leitura</span>
+</div>
+<div class="observation-heading">
+  <div>
+    <p class="eyebrow">OBSERVABILIDADE DE DADOS</p>
+    <h1>
+      {{ graphMode ? "Mapa de dependências" : "Do início ao dado"
+      }}<span>.</span>
+    </h1>
+    <p>Acompanhe cada task. Entenda cada dependência.</p>
+  </div>
+  <div class="refresh-actions">
+    <label class="auto-refresh"
+      ><input
+        type="checkbox"
+        [ngModel]="store.autoRefresh()"
+        (ngModelChange)="store.autoRefresh.set($event)"
+        [disabled]="!store.source.isDemo"
+      />Atualização a cada 15s</label
+    ><button
+      class="primary-button"
+      (click)="store.refresh()"
+      [disabled]="store.loading()"
+    >
+      ↻ {{ store.loading() ? "Atualizando…" : "Atualizar" }}
+    </button>
+  </div>
+</div>
+<div class="demo-banner">
+  <span
+    ><strong>{{
+      store.source.isDemo ? "AMBIENTE DEMONSTRATIVO" : "INTEGRAÇÃO PENDENTE"
+    }}</strong>
+    {{
+      store.source.isDemo
+        ? "Dados fictícios para explorar a interface. Dados demonstrativos com edição e exportação de configurações YAML."
+        : "API do orquestrador ainda não conectada. Nenhum dado real disponível."
+    }}</span
+  >
+  @if (store.source.isDemo) {
+    <label
+      >Cenário
+      <select
+        aria-label="Cenário demonstrativo"
+        [ngModel]="store.scenario()"
+        (ngModelChange)="store.changeScenario($event)"
+        [disabled]="store.loading()"
+      >
+        <option value="standard">24 tasks</option>
+        <option value="large">240 tasks</option>
+      </select></label
+    >
+  }
+</div>
+<nav class="view-tabs" aria-label="Visualização do orquestrador">
+  <a
+    routerLink="/overview"
+    routerLinkActive="active"
+    ariaCurrentWhenActive="page"
+    >▦ Visão geral</a
+  ><a
+    routerLink="/dependencies"
+    routerLinkActive="active"
+    ariaCurrentWhenActive="page"
+    >⌘ Dependências</a
+  ><span>EXECUÇÕES EM CONSULTA · EXPORTAÇÃO YAML</span>
+</nav>
+@if (store.error()) {
+  <div class="data-error" role="alert">
+    <div>
+      <strong>Não foi possível atualizar a observabilidade</strong>
+      <p>{{ store.error() }}</p>
+      @if (store.snapshot()) {
+        <p>
+          Exibindo o último snapshot disponível. Os dados podem estar
+          desatualizados.
+        </p>
+      }
+    </div>
+    <button
+      class="text-button"
+      (click)="store.refresh()"
+      [disabled]="store.loading()"
+    >
+      Tentar novamente
+    </button>
+  </div>
+}
+@if (!store.snapshot() && store.loading()) {
+  <div class="loading-state" role="status">
+    <span>◌</span>
+    <h2>Preparando seu mapa de dependências</h2>
+    <p>Carregando workflows, tasks e ondas de execução…</p>
+  </div>
+}
+@if (store.snapshot(); as snapshot) {
+  @if (!graphMode) {
+    <section class="metrics" aria-label="Indicadores das tasks filtradas">
+      <article>
+        <span>Total de tasks</span><strong>{{ store.metrics().total }}</strong
+        ><small>{{ store.metrics().other }} ignoradas / canceladas</small>
+      </article>
+      <article class="completed">
+        <span>✓ Concluídas</span><strong>{{ store.metrics().completed }}</strong
+        ><small>Processamento finalizado</small>
+      </article>
+      <article class="running">
+        <span>↻ Em execução</span><strong>{{ store.metrics().running }}</strong
+        ><small>Processamento em andamento</small>
+      </article>
+      <article class="pending">
+        <span>◷ Pendentes</span><strong>{{ store.metrics().pending }}</strong
+        ><small>Inclui aguardando dependências</small>
+      </article>
+      <article class="failed">
+        <span>! Com erro</span><strong>{{ store.metrics().error }}</strong
+        ><small>Precisam de atenção</small>
+      </article>
+      <article>
+        <span>≋ Ondas</span><strong>{{ store.metrics().waves }}</strong
+        ><small>Por workflow filtrado</small>
+      </article>
+      <article>
+        <span>◴ Tempo observado</span
+        ><strong class="time-value">{{ store.duration() }}</strong
+        ><small
+          title="Intervalo entre o primeiro início e o último fim ou observação das tasks em execução. Não soma tarefas paralelas."
+          >Intervalo das tasks filtradas</small
+        >
+      </article>
+    </section>
+  }
+  <section class="filters-panel">
+    <app-observation-filters
+      [filters]="store.filters()"
+      [units]="store.units()"
+      [layers]="store.layers()"
+      [workflows]="snapshot.workflows"
+      (changed)="store.setFilters($event)"
+      (cleared)="store.reset()"
+    />
+  </section>
+  <section class="workflow-strip" aria-label="Execuções demonstrativas">
+    @for (workflow of store.workflows(); track workflow.id) {
+      <div>
+        <span class="workflow-symbol">⌘</span>
+        <div>
+          <strong>{{ workflow.name }}</strong
+          ><small
+            >Status global · Início
+            {{ workflow.startedAt | date: "dd/MM HH:mm:ss" }} ·
+            {{
+              workflow.finishedAt
+                ? "Fim " + (workflow.finishedAt | date: "HH:mm:ss")
+                : "Sem conclusão informada"
+            }}</small
+          >
+        </div>
+        <app-status-badge [status]="workflow.status" />
+      </div>
+    }
+  </section>
+  <section
+    class="observation-workbench"
+    aria-label="Explorador de dependências"
+    [class.has-tree]="treeOpen()"
+    [class.has-details]="!!store.selected()"
+  >
+    @if (treeOpen()) {
+      <aside class="hierarchy-panel" aria-label="Hierarquia das configurações">
+        <app-task-hierarchy
+          [tasks]="store.visible()"
+          [selectedId]="store.selectedId()"
+          (selected)="store.reveal($event)"
+          (editRequested)="openEditor($event)"
+          (collapsed)="treeOpen.set(false)"
+        />
+      </aside>
+    }
+    <div class="graph-panel">
+      @if (!treeOpen()) {
+        <button class="reopen-tree text-button" (click)="treeOpen.set(true)">
+          ⇥ Abrir explorador
+        </button>
+      }
+      <app-task-graph
+        [tasks]="store.visible()"
+        [selectedId]="store.selectedId()"
+        [selectedWave]="store.selectedWave()"
+        [focusRequest]="store.focusRequest()"
+        (selected)="store.selectedId.set($event); store.selectedWave.set(null)"
+      />
+    </div>
+    @if (store.selected(); as task) {
+      <aside class="details-panel" aria-labelledby="task-detail-title">
+        <app-task-detail
+          [task]="task"
+          (editRequested)="openEditor(task.id)"
+          [tasks]="store.tasks()"
+          [workflows]="snapshot.workflows"
+          (closed)="store.selectedId.set(null)"
+          (navigated)="store.reveal($event)"
+        />
+      </aside>
+    }
+  </section>
+  <div class="status-legend" aria-label="Legenda de status">
+    @for (status of legend; track status.key) {
+      <span [attr.data-status]="status.key"
+        >{{ status.icon }} {{ status.label }}</span
+      >
+    }
+    <span class="filtered-count"
+      >{{ store.visible().length }} de {{ store.tasks().length }} tasks</span
+    >
+  </div>
+  <section class="waves-panel">
+    <div class="waves-title">
+      <div>
+        <p class="eyebrow">PROGRESSÃO DO WORKFLOW</p>
+        <h2>Uma onda de cada vez.</h2>
+      </div>
+      <p>Selecione uma onda para destacar suas tasks no grafo.</p>
+    </div>
+    <div class="wave-list">
+      @for (wave of store.waves(); track wave.key) {
+        <button
+          class="wave-card"
+          [attr.data-status]="wave.status"
+          [class.active]="store.selectedWave() === wave.key"
+          [attr.aria-pressed]="store.selectedWave() === wave.key"
+          (click)="toggleWave(wave.key)"
+        >
+          <small>{{ wave.workflow }}</small>
+          <div>
+            <strong>{{ wave.label }}</strong
+            ><span
+              >{{ statusLabels[wave.status].icon }}
+              {{ statusLabels[wave.status].label }}</span
+            >
+          </div>
+          <p>
+            {{ wave.members.length }} tasks <span>{{ wave.errors }} erros</span>
+          </p>
+          <div class="wave-progress">
+            <span
+              [style.width.%]="(wave.completed / wave.members.length) * 100"
+            ></span>
+          </div>
+        </button>
+      }
+      @if (!store.waves().length) {
+        <p class="muted">Nenhuma onda corresponde aos filtros.</p>
+      }
+    </div>
+  </section>
+  <div class="observation-footer">
+    <span
+      ><span class="snapshot-dot"></span> Snapshot demonstrativo ·
+      {{ snapshot.observedAt | date: "dd/MM/yyyy HH:mm:ss" }} · Horários
+      locais</span
+    ><span
+      >Ondas e dependências fornecidas pelo mock · Sem comandos de
+      execução</span
+    >
+  </div>
+}
+
+@if (editingTask(); as task) {
+  <app-task-editor [task]="task" (dismissed)="editingTask.set(null)" />
+}
